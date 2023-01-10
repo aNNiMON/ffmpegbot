@@ -1,0 +1,5 @@
+# Telegram bot token and bot username
+botToken: 1234567890:AAAABBBBCCCCDDDDEEEEFF-GGGGHHHHIIII
+botUsername: yourbotname
+# Allowed user ids
+allowedUsers: [12345, 12346, 12347]
