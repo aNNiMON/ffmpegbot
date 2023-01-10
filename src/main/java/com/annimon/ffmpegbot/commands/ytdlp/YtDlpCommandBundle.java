@@ -9,7 +9,9 @@ import com.annimon.tgbotsmodule.commands.context.RegexMessageContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public class YtDlpCommandBundle implements CommandBundle<For> {
@@ -23,7 +25,9 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
 
     private void download(@NotNull RegexMessageContext ctx) {
         final String url = ctx.group(1);
-        final String downloadOption = ctx.group(2).isEmpty() ? "720": ctx.group(2);
+        final String downloadOption = Optional.ofNullable(ctx.group(2))
+                .filter(Predicate.not(String::isBlank))
+                .orElse("720");
         final var fileType = downloadOption.equals("audio") ? FileType.AUDIO : FileType.VIDEO;
         final var ytDlpSession = new YtDlpSession(url, downloadOption, fileType);
         final var filename = FilePath.generateFilename(url, Resolver.resolveDefaultFilename(fileType));
