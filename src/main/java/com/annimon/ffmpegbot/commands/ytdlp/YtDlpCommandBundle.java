@@ -17,6 +17,7 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
     public void register(@NotNull CommandRegistry commands) {
         commands.register(new SimpleRegexCommand(
                 Pattern.compile("/dl (https?://[^ ]+) ?(audio|\\d+)?p?"),
+                For.ADMIN,
                 this::download));
     }
 

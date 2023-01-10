@@ -34,10 +34,10 @@ public class MediaProcessingBundle implements CommandBundle<For> {
 
     @Override
     public void register(@NotNull CommandRegistry commands) {
-        commands.register(new SimpleCallbackQueryCommand(PREV, ctx -> toggleParameter(ctx, true)));
-        commands.register(new SimpleCallbackQueryCommand(NEXT, ctx -> toggleParameter(ctx, false)));
-        commands.register(new SimpleCallbackQueryCommand(DETAIL, sessionCommand(this::details)));
-        commands.register(new SimpleCallbackQueryCommand(PROCESS, sessionCommand(this::process)));
+        commands.register(new SimpleCallbackQueryCommand(PREV, For.ADMIN, ctx -> toggleParameter(ctx, true)));
+        commands.register(new SimpleCallbackQueryCommand(NEXT, For.ADMIN, ctx -> toggleParameter(ctx, false)));
+        commands.register(new SimpleCallbackQueryCommand(DETAIL, For.ADMIN, sessionCommand(this::details)));
+        commands.register(new SimpleCallbackQueryCommand(PROCESS, For.ADMIN, sessionCommand(this::process)));
     }
 
     public void handleMessage(final @NotNull CommonAbsSender sender, final @NotNull Message message) {

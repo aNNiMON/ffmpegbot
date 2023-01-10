@@ -1,5 +1,7 @@
 # Telegram bot token and bot username
 botToken: 1234567890:AAAABBBBCCCCDDDDEEEEFF-GGGGHHHHIIII
 botUsername: yourbotname
+# Superusers can execute /run command
+superUsers: [12345]
 # Allowed user ids
-allowedUsers: [12345, 12346, 12347]
+allowedUsers: [12346, 12347]

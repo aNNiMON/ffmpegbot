@@ -12,6 +12,9 @@ import com.annimon.tgbotsmodule.commands.authority.For;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
+
+import java.util.EnumSet;
 
 public class MainBotHandler extends BotHandler {
     private final BotConfig botConfig;
@@ -20,7 +23,7 @@ public class MainBotHandler extends BotHandler {
 
     public MainBotHandler(BotConfig botConfig) {
         this.botConfig = botConfig;
-        commands = new CommandRegistry<>(this, ((update, user, fors) -> botConfig.isUserAllowed(user.getId())));
+        commands = new CommandRegistry<>(this, this::checkAccess);
         final var sessions = new Sessions();
         mediaProcessingBundle = new MediaProcessingBundle(sessions);
         commands.registerBundle(mediaProcessingBundle);
@@ -49,5 +52,15 @@ public class MainBotHandler extends BotHandler {
     @Override
     public String getBotToken() {
         return botConfig.botToken();
+    }
+
+    private boolean checkAccess(Update update, @NotNull User user, @NotNull EnumSet<For> roles) {
+        final long userId = user.getId();
+
+        if (roles.contains(For.CREATOR) && botConfig.superUsers().contains(userId))
+            return true;
+        if (roles.contains(For.ADMIN) && botConfig.isUserAllowed(userId))
+            return true;
+        return roles.contains(For.USER);
     }
 }

@@ -27,6 +27,7 @@ public class InputParametersBundle implements CommandBundle<For> {
     public void register(@NotNull CommandRegistry commands) {
         commands.register(new SimpleRegexCommand(
                 Pattern.compile("^/(ss|to?) ?(\\d+|\\d{2}:\\d{2}:\\d{2})?$"),
+                For.ADMIN,
                 sessionCommand(this::cutCommand)));
     }
 
