@@ -8,6 +8,8 @@ mainClassName = 'com.annimon.ffmpegbot.Main'
 group 'com.annimon'
 version '1.0-SNAPSHOT'
 
+sourceCompatibility = 17
+targetCompatibility = 17
 compileJava.options.encoding = 'UTF-8'
 
 tasks.withType(JavaCompile) {
