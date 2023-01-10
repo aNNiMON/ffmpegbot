@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.EnumSet;
 
@@ -62,5 +63,10 @@ public class MainBotHandler extends BotHandler {
         if (roles.contains(For.ADMIN) && botConfig.isUserAllowed(userId))
             return true;
         return roles.contains(For.USER);
+    }
+
+    @Override
+    public void handleTelegramApiException(TelegramApiException ex) {
+        throw new RuntimeException(ex);
     }
 }
