@@ -1,5 +1,6 @@
 package com.annimon.ffmpegbot.commands.admin;
 
+import com.annimon.ffmpegbot.Permissions;
 import com.annimon.tgbotsmodule.commands.TextCommand;
 import com.annimon.tgbotsmodule.commands.authority.For;
 import com.annimon.tgbotsmodule.commands.context.MessageContext;
@@ -25,7 +26,7 @@ public class RunCommand implements TextCommand {
     @SuppressWarnings("unchecked")
     @Override
     public EnumSet<For> authority() {
-        return EnumSet.of(For.CREATOR);
+        return Permissions.SUPERUSERS;
     }
 
     @Override

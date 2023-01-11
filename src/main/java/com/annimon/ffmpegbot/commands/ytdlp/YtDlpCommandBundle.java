@@ -1,5 +1,6 @@
 package com.annimon.ffmpegbot.commands.ytdlp;
 
+import com.annimon.ffmpegbot.Permissions;
 import com.annimon.ffmpegbot.session.*;
 import com.annimon.tgbotsmodule.commands.CommandBundle;
 import com.annimon.tgbotsmodule.commands.CommandRegistry;
@@ -19,7 +20,7 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
     public void register(@NotNull CommandRegistry commands) {
         commands.register(new SimpleRegexCommand(
                 Pattern.compile("/dl (https?://[^ ]+) ?(audio|\\d+)?p?"),
-                For.ADMIN,
+                Permissions.ALLOWED_USERS,
                 this::download));
     }
 

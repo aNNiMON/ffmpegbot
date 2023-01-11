@@ -21,6 +21,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.annimon.ffmpegbot.Permissions.ALLOWED_USERS;
 import static com.annimon.ffmpegbot.commands.ffmpeg.CallbackQueryCommands.*;
 import static com.annimon.ffmpegbot.commands.ffmpeg.MediaProcessingKeyboard.createKeyboard;
 
@@ -34,10 +35,10 @@ public class MediaProcessingBundle implements CommandBundle<For> {
 
     @Override
     public void register(@NotNull CommandRegistry commands) {
-        commands.register(new SimpleCallbackQueryCommand(PREV, For.ADMIN, ctx -> toggleParameter(ctx, true)));
-        commands.register(new SimpleCallbackQueryCommand(NEXT, For.ADMIN, ctx -> toggleParameter(ctx, false)));
-        commands.register(new SimpleCallbackQueryCommand(DETAIL, For.ADMIN, sessionCommand(this::details)));
-        commands.register(new SimpleCallbackQueryCommand(PROCESS, For.ADMIN, sessionCommand(this::process)));
+        commands.register(new SimpleCallbackQueryCommand(PREV, ALLOWED_USERS, ctx -> toggleParameter(ctx, true)));
+        commands.register(new SimpleCallbackQueryCommand(NEXT, ALLOWED_USERS, ctx -> toggleParameter(ctx, false)));
+        commands.register(new SimpleCallbackQueryCommand(DETAIL, ALLOWED_USERS, sessionCommand(this::details)));
+        commands.register(new SimpleCallbackQueryCommand(PROCESS, ALLOWED_USERS, sessionCommand(this::process)));
     }
 
     public void handleMessage(final @NotNull CommonAbsSender sender, final @NotNull Message message) {

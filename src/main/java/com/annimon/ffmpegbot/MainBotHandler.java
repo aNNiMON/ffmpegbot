@@ -19,11 +19,13 @@ import java.util.EnumSet;
 
 public class MainBotHandler extends BotHandler {
     private final BotConfig botConfig;
+    private final Permissions permissions;
     private final CommandRegistry<For> commands;
     private final MediaProcessingBundle mediaProcessingBundle;
 
     public MainBotHandler(BotConfig botConfig) {
         this.botConfig = botConfig;
+        permissions = new Permissions(botConfig.superUsers(), botConfig.allowedUsers());
         commands = new CommandRegistry<>(this, this::checkAccess);
         final var sessions = new Sessions();
         mediaProcessingBundle = new MediaProcessingBundle(sessions);
@@ -39,7 +41,7 @@ public class MainBotHandler extends BotHandler {
         if (commands.handleUpdate(update)) {
             return null;
         }
-        if (update.hasMessage()) {
+        if (update.hasMessage() && permissions.isUserAllowed(update.getMessage().getFrom().getId())) {
             mediaProcessingBundle.handleMessage(this, update.getMessage());
         }
         return null;
@@ -57,12 +59,7 @@ public class MainBotHandler extends BotHandler {
 
     private boolean checkAccess(Update update, @NotNull User user, @NotNull EnumSet<For> roles) {
         final long userId = user.getId();
-
-        if (roles.contains(For.CREATOR) && botConfig.superUsers().contains(userId))
-            return true;
-        if (roles.contains(For.ADMIN) && botConfig.isUserAllowed(userId))
-            return true;
-        return roles.contains(For.USER);
+        return permissions.hasAccess(userId, roles);
     }
 
     @Override
