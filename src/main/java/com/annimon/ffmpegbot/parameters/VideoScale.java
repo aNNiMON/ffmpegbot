@@ -6,7 +6,7 @@ import java.util.List;
 
 public class VideoScale extends StringParameter {
     private static final List<String> VALUES = List.of(
-            "144", "240", "360", "480", "", "720", "1080"
+            "144", "240", "360", "", "480", "720", "1080"
     );
 
     public VideoScale() {

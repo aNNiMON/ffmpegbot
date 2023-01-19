@@ -6,8 +6,7 @@ import java.util.List;
 
 public class VideoBitrate extends StringParameter {
     private static final List<String> VALUES = List.of(
-            "",
-            "16k", "32k", "64k", "128k", "256k",
+            "16k", "32k", "", "64k", "128k", "256k",
             "512k", "1M", "2M", "4M", "8M", "16M"
     );
 
