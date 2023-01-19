@@ -10,5 +10,6 @@ public class AdminCommandBundle implements CommandBundle<For> {
     @Override
     public void register(@NotNull CommandRegistry commands) {
         commands.register(new RunCommand());
+        commands.register(new ClearCommand());
     }
 }
