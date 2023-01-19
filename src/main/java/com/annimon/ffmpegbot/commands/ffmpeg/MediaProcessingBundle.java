@@ -101,6 +101,7 @@ public class MediaProcessingBundle implements CommandBundle<For> {
 
     private void process(final CallbackQueryContext ctx, final MediaSession session) {
         if (!session.isDownloaded()) {
+            sendAction(ctx, session);
             download(ctx, session);
         }
         if (!session.isDownloaded()) {
@@ -108,6 +109,8 @@ public class MediaProcessingBundle implements CommandBundle<For> {
             editMessage(ctx, session);
             return;
         }
+
+        sendAction(ctx, session);
         CompletableFuture.runAsync(() -> new FFmpegTask().process(session))
                 .thenRunAsync(() -> {
                     editMessage(ctx, session);
@@ -134,10 +137,15 @@ public class MediaProcessingBundle implements CommandBundle<For> {
         }
     }
 
-    private void editMessage(CallbackQueryContext ctx, MediaSession session) {
+    private static void editMessage(CallbackQueryContext ctx, MediaSession session) {
         ctx.editMessage(session.toString())
                 .enableHtml()
                 .setReplyMarkup(createKeyboard(session))
+                .callAsync(ctx.sender);
+    }
+
+    private static void sendAction(CallbackQueryContext ctx, MediaSession session) {
+        Methods.sendChatAction(session.getChatId(), Resolver.resolveAction(session.getFileType()))
                 .callAsync(ctx.sender);
     }
 

@@ -5,6 +5,7 @@ import com.annimon.ffmpegbot.parameters.Parameters;
 import com.annimon.tgbotsmodule.api.methods.Methods;
 import com.annimon.tgbotsmodule.api.methods.interfaces.MediaMessageMethod;
 import org.jetbrains.annotations.NotNull;
+import org.telegram.telegrambots.meta.api.methods.ActionType;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
@@ -55,6 +56,15 @@ public class Resolver {
             case VIDEO -> Methods.sendVideo();
             case VIDEO_NOTE -> Methods.sendVideoNote();
             case VOICE -> Methods.sendVoice();
+        };
+    }
+
+    public static ActionType resolveAction(FileType fileType) {
+        return switch (fileType) {
+            case VIDEO -> ActionType.UPLOADVIDEO;
+            case VIDEO_NOTE -> ActionType.UPLOADVIDEONOTE;
+            case VOICE -> ActionType.UPLOADVOICE;
+            default -> ActionType.TYPING;
         };
     }
 }

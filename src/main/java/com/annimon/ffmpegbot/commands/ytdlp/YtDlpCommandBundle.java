@@ -2,6 +2,7 @@ package com.annimon.ffmpegbot.commands.ytdlp;
 
 import com.annimon.ffmpegbot.Permissions;
 import com.annimon.ffmpegbot.session.*;
+import com.annimon.tgbotsmodule.api.methods.Methods;
 import com.annimon.tgbotsmodule.commands.CommandBundle;
 import com.annimon.tgbotsmodule.commands.CommandRegistry;
 import com.annimon.tgbotsmodule.commands.SimpleRegexCommand;
@@ -34,6 +35,7 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
         final var filename = FilePath.generateFilename(url, Resolver.resolveDefaultFilename(fileType));
         ytDlpSession.setOutputFilename(filename);
 
+        Methods.sendChatAction(ctx.chatId(), Resolver.resolveAction(fileType)).callAsync(ctx.sender);
         CompletableFuture.runAsync(() -> new YtDlpTask().process(ytDlpSession))
                 .thenRunAsync(() -> {
                     final File outputFile = FilePath.outputFile(ytDlpSession.getOutputFilename());
