@@ -1,6 +1,7 @@
 package com.annimon.ffmpegbot.commands.ytdlp;
 
 import com.annimon.ffmpegbot.Permissions;
+import com.annimon.ffmpegbot.file.FilePath;
 import com.annimon.ffmpegbot.session.*;
 import com.annimon.tgbotsmodule.api.methods.Methods;
 import com.annimon.tgbotsmodule.commands.CommandBundle;
@@ -32,7 +33,7 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
                 .orElse("720");
         final var fileType = downloadOption.equals("audio") ? FileType.AUDIO : FileType.VIDEO;
         final var ytDlpSession = new YtDlpSession(url, downloadOption, fileType);
-        final var filename = FilePath.generateFilename(url, Resolver.resolveDefaultFilename(fileType));
+        final var filename = FilePath.generateFilename(url, FilePath.defaultFilename(fileType));
         ytDlpSession.setOutputFilename(filename);
 
         Methods.sendChatAction(ctx.chatId(), Resolver.resolveAction(fileType)).callAsync(ctx.sender);

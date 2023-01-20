@@ -1,7 +1,9 @@
 package com.annimon.ffmpegbot.commands.ffmpeg;
 
+import com.annimon.ffmpegbot.file.FileDownloadException;
+import com.annimon.ffmpegbot.file.FileDownloader;
 import com.annimon.ffmpegbot.parameters.Parameter;
-import com.annimon.ffmpegbot.session.FilePath;
+import com.annimon.ffmpegbot.file.FilePath;
 import com.annimon.ffmpegbot.session.MediaSession;
 import com.annimon.ffmpegbot.session.Resolver;
 import com.annimon.ffmpegbot.session.Sessions;
@@ -14,7 +16,6 @@ import com.annimon.tgbotsmodule.commands.context.CallbackQueryContext;
 import com.annimon.tgbotsmodule.services.CommonAbsSender;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -28,9 +29,11 @@ import static com.annimon.ffmpegbot.commands.ffmpeg.MediaProcessingKeyboard.crea
 public class MediaProcessingBundle implements CommandBundle<For> {
 
     private final Sessions sessions;
+    private final FileDownloader fileDownloader;
 
-    public MediaProcessingBundle(Sessions sessions) {
+    public MediaProcessingBundle(Sessions sessions, FileDownloader fileDownloader) {
         this.sessions = sessions;
+        this.fileDownloader = fileDownloader;
     }
 
     @Override
@@ -127,11 +130,13 @@ public class MediaProcessingBundle implements CommandBundle<For> {
 
     private void download(final CallbackQueryContext ctx, final MediaSession session) {
         try {
-            final var tgFile = Methods.getFile(session.getFileId()).call(ctx.sender);
-            final var localFilename = FilePath.generateFilename(tgFile.getFileId(), tgFile.getFilePath());
-            session.setInputFile(ctx.sender.downloadFile(tgFile, FilePath.inputFile(localFilename)));
-            session.setOutputFile(FilePath.outputFile(localFilename));
-        } catch (TelegramApiException e) {
+            final String defaultFilename = FilePath.defaultFilename(session.getFileType());
+            final var file = fileDownloader.downloadFile(ctx.sender, session.getFileId(), defaultFilename);
+            final var filename = FilePath.generateFilename(session.getFileId(), file.getName());
+            session.setInputFile(FilePath.inputFile(filename));
+            file.renameTo(session.getInputFile());
+            session.setOutputFile(FilePath.outputFile(filename));
+        } catch (FileDownloadException e) {
             session.setStatus("Unable to download due to " + e.getMessage());
             editMessage(ctx, session);
         }

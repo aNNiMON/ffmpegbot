@@ -5,6 +5,9 @@ import com.annimon.ffmpegbot.commands.admin.AdminCommandBundle;
 import com.annimon.ffmpegbot.commands.ffmpeg.InputParametersBundle;
 import com.annimon.ffmpegbot.commands.ffmpeg.MediaProcessingBundle;
 import com.annimon.ffmpegbot.commands.ytdlp.YtDlpCommandBundle;
+import com.annimon.ffmpegbot.file.FallbackFileDownloader;
+import com.annimon.ffmpegbot.file.TelegramClientFileDownloader;
+import com.annimon.ffmpegbot.file.TelegramFileDownloader;
 import com.annimon.ffmpegbot.session.Sessions;
 import com.annimon.tgbotsmodule.BotHandler;
 import com.annimon.tgbotsmodule.commands.CommandRegistry;
@@ -28,7 +31,14 @@ public class MainBotHandler extends BotHandler {
         permissions = new Permissions(botConfig.superUsers(), botConfig.allowedUsers());
         commands = new CommandRegistry<>(this, this::checkAccess);
         final var sessions = new Sessions();
-        mediaProcessingBundle = new MediaProcessingBundle(sessions);
+        final var fallbackFileDownloader = new FallbackFileDownloader(
+                new TelegramFileDownloader(),
+                new TelegramClientFileDownloader(
+                        botConfig.downloaderScript(),
+                        botConfig.appId(), botConfig.appHash(),
+                        botConfig.botToken(), botConfig.botUsername())
+        );
+        mediaProcessingBundle = new MediaProcessingBundle(sessions, fallbackFileDownloader);
         commands.registerBundle(mediaProcessingBundle);
         commands.registerBundle(new InputParametersBundle(sessions));
         commands.registerBundle(new YtDlpCommandBundle());
@@ -64,6 +74,6 @@ public class MainBotHandler extends BotHandler {
 
     @Override
     public void handleTelegramApiException(TelegramApiException ex) {
-        throw new RuntimeException(ex);
+        throw new TelegramRuntimeException(ex);
     }
 }

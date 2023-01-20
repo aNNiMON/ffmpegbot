@@ -2,7 +2,7 @@ package com.annimon.ffmpegbot.commands.admin;
 
 import com.annimon.ffmpegbot.Permissions;
 import com.annimon.ffmpegbot.TextUtils;
-import com.annimon.ffmpegbot.session.FilePath;
+import com.annimon.ffmpegbot.file.FilePath;
 import com.annimon.tgbotsmodule.commands.TextCommand;
 import com.annimon.tgbotsmodule.commands.authority.For;
 import com.annimon.tgbotsmodule.commands.context.MessageContext;

@@ -1,7 +1,7 @@
 package com.annimon.ffmpegbot.commands.ffmpeg;
 
 import com.annimon.ffmpegbot.parameters.*;
-import com.annimon.ffmpegbot.session.FilePath;
+import com.annimon.ffmpegbot.file.FilePath;
 import com.annimon.ffmpegbot.session.FileType;
 import com.annimon.ffmpegbot.session.FileTypes;
 import com.annimon.ffmpegbot.session.MediaSession;

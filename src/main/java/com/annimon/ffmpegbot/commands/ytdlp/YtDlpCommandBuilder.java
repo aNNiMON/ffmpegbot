@@ -1,6 +1,6 @@
 package com.annimon.ffmpegbot.commands.ytdlp;
 
-import com.annimon.ffmpegbot.session.FilePath;
+import com.annimon.ffmpegbot.file.FilePath;
 import com.annimon.ffmpegbot.session.YtDlpSession;
 import org.jetbrains.annotations.NotNull;
 

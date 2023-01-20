@@ -41,14 +41,6 @@ public class Resolver {
         };
     }
 
-    public static String resolveDefaultFilename(@NotNull FileType fileType) {
-        return "file." + switch (fileType) {
-            case ANIMATION, VIDEO, VIDEO_NOTE -> "mp4";
-            case AUDIO -> "mp3";
-            case VOICE -> "ogg";
-        };
-    }
-
     public static MediaMessageMethod<? extends MediaMessageMethod<?, ?>, ?> resolveMethod(@NotNull FileType fileType) {
         return switch (fileType) {
             case ANIMATION -> Methods.sendAnimation();

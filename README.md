@@ -15,6 +15,7 @@ Telegram Bot for re-encoding media
  - Telegram bot username and token, [@BotFather](https://t.me/BotFather)
  - JRE 17+ or JDK 17+ (for build)
  - `ffmpeg` must be installed and available in `PATH`.
+ - `python3` version 3.8+ must be installed and available in `PATH`.
  - `yt-dlp` for `/dl` command.
 
 ## Installation
