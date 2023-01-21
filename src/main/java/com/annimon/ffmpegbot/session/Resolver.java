@@ -14,19 +14,23 @@ public class Resolver {
     public static FileInfo resolveFileInfo(@NotNull Message message) {
         if (message.hasAnimation()) {
             final var att = message.getAnimation();
-            return new FileInfo(FileType.ANIMATION, att.getFileId(), att.getFileName());
+            return new FileInfo(FileType.ANIMATION, att.getFileId(), att.getFileName(),
+                    att.getFileSize(), att.getDuration(), att.getWidth(), att.getHeight());
         } else if (message.hasAudio()) {
             final var att = message.getAudio();
-            return new FileInfo(FileType.AUDIO, att.getFileId(), att.getFileName());
+            return new FileInfo(FileType.AUDIO, att.getFileId(), att.getFileName(), att.getFileSize(), att.getDuration());
         } else if (message.hasVideo()) {
             final var att = message.getVideo();
-            return new FileInfo(FileType.VIDEO, att.getFileId(), att.getFileName());
+            return new FileInfo(FileType.VIDEO, att.getFileId(), att.getFileName(),
+                    att.getFileSize(), att.getDuration(), att.getWidth(), att.getHeight());
         } else if (message.hasVideoNote()) {
             final var att = message.getVideoNote();
-            return new FileInfo(FileType.VIDEO_NOTE, att.getFileId(), null);
+            final Long fileSize = att.getFileSize() != null ? (Long.valueOf(att.getFileSize())) : null;
+            return new FileInfo(FileType.VIDEO_NOTE, att.getFileId(), null,
+                    fileSize, att.getDuration(), att.getLength(), att.getLength());
         } else if (message.hasVoice()) {
             final var att = message.getVoice();
-            return new FileInfo(FileType.VOICE, att.getFileId(), null);
+            return new FileInfo(FileType.VOICE, att.getFileId(), null, att.getFileSize(), att.getDuration());
         } else {
             return null;
         }

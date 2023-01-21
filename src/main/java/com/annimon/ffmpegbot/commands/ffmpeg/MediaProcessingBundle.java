@@ -50,9 +50,7 @@ public class MediaProcessingBundle implements CommandBundle<For> {
 
         final var session = new MediaSession();
         session.setChatId(message.getChatId());
-        session.setFileId(fileInfo.fileId());
-        session.setFileType(fileInfo.fileType());
-        session.setOriginalFilename(fileInfo.filename());
+        session.fromFileInfo(fileInfo);
         session.setParams(Resolver.resolveParameters(fileInfo.fileType()));
 
         final var result = Methods.sendMessage()
