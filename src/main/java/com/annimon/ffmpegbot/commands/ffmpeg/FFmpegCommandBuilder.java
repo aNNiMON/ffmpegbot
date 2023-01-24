@@ -129,7 +129,7 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
     public String[] buildCommand(final @NotNull MediaSession session) {
         final var commands = new ArrayList<String>();
         commands.addAll(List.of("ffmpeg", "-loglevel", "quiet", "-stats"));
-        commands.addAll(buildTrim(session));
+        commands.addAll(session.getInputParams().asFFmpegCommands());
         commands.addAll(List.of("-i", FilePath.inputDir() + "/" + session.getInputFile().getName()));
         if (FileTypes.canContainAudio(session.getFileType())) {
             commands.addAll(audioCommands);
@@ -147,23 +147,5 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
         }
         commands.addAll(List.of("-y", FilePath.outputDir() + "/" + session.getOutputFile().getName()));
         return commands.toArray(String[]::new);
-    }
-
-    private List<String> buildTrim(@NotNull MediaSession session) {
-        final var commands = new ArrayList<String>();
-        final var inputParams = session.getInputParams();
-        if (!inputParams.getStartPosition().isEmpty()) {
-            commands.add("-ss");
-            commands.add(inputParams.getStartPosition());
-        }
-        if (!inputParams.getEndPosition().isEmpty()) {
-            commands.add("-to");
-            commands.add(inputParams.getEndPosition());
-        }
-        if (!inputParams.getDuration().isEmpty()) {
-            commands.add("-t");
-            commands.add(inputParams.getDuration());
-        }
-        return commands;
     }
 }

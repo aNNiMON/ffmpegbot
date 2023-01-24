@@ -23,6 +23,12 @@ public class YtDlpCommandBuilder {
             final var other = "best";
             commands.add(String.join("/", List.of(mp4, any, other)));
         }
+        // Trim
+        if (!session.getInputParams().isEmpty()) {
+            commands.addAll(List.of("--external-downloader", "ffmpeg"));
+            final String ffmpegArgs = String.join(" ", session.getInputParams().asFFmpegCommands());
+            commands.addAll(List.of("--external-downloader-args", "ffmpeg_i:" + ffmpegArgs));
+        }
         // Url
         commands.add(session.getUrl());
         // Output

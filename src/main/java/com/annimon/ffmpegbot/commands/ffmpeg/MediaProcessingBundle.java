@@ -72,7 +72,7 @@ public class MediaProcessingBundle implements CommandBundle<For> {
         final var msg = ctx.message();
         if (msg == null) return;
 
-        final var session = sessions.get(msg.getChatId(), msg.getMessageId());
+        final var session = sessions.getMediaSession(msg.getChatId(), msg.getMessageId());
         if (session == null) return;
 
         final String id = ctx.argument(0);
@@ -157,7 +157,7 @@ public class MediaProcessingBundle implements CommandBundle<For> {
             final var msg = ctx.message();
             if (msg == null) return;
 
-            final var session = sessions.get(msg.getChatId(), msg.getMessageId());
+            final var session = sessions.getMediaSession(msg.getChatId(), msg.getMessageId());
             if (session == null) return;
 
             consumer.accept(ctx, session);

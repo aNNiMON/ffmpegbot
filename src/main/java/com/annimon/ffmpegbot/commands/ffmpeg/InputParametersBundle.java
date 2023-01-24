@@ -1,6 +1,6 @@
 package com.annimon.ffmpegbot.commands.ffmpeg;
 
-import com.annimon.ffmpegbot.session.MediaSession;
+import com.annimon.ffmpegbot.session.Session;
 import com.annimon.ffmpegbot.session.Sessions;
 import com.annimon.tgbotsmodule.api.methods.Methods;
 import com.annimon.tgbotsmodule.commands.CommandBundle;
@@ -31,7 +31,7 @@ public class InputParametersBundle implements CommandBundle<For> {
                 sessionCommand(this::cutCommand)));
     }
 
-    private void cutCommand(RegexMessageContext ctx, MediaSession session) {
+    private void cutCommand(RegexMessageContext ctx, Session session) {
         final var arg = ctx.group(2);
         final var inputParams = session.getInputParams();
         switch (ctx.group(1)) {
@@ -42,7 +42,7 @@ public class InputParametersBundle implements CommandBundle<For> {
         editMessage(ctx, session);
     }
 
-    private void editMessage(MessageContext ctx, MediaSession session) {
+    private void editMessage(MessageContext ctx, Session session) {
         Methods.editMessageText()
                 .setChatId(session.getChatId())
                 .setMessageId(session.getMessageId())
@@ -52,7 +52,7 @@ public class InputParametersBundle implements CommandBundle<For> {
                 .callAsync(ctx.sender);
     }
 
-    private Consumer<RegexMessageContext> sessionCommand(BiConsumer<RegexMessageContext, MediaSession> consumer) {
+    private Consumer<RegexMessageContext> sessionCommand(BiConsumer<RegexMessageContext, Session> consumer) {
         return ctx -> {
             final var msg = ctx.message().getReplyToMessage();
             if (msg == null) return;

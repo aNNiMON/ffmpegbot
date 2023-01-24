@@ -1,6 +1,9 @@
 package com.annimon.ffmpegbot.parameters;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 public class InputParameters {
     private String startPosition = "";
@@ -31,6 +34,27 @@ public class InputParameters {
     public void setEndPosition(String endPosition) {
         this.endPosition = endPosition;
         this.duration = "";
+    }
+
+    public boolean isEmpty() {
+        return Stream.of(startPosition, endPosition, duration).allMatch(String::isEmpty);
+    }
+
+    public List<String> asFFmpegCommands() {
+        final var commands = new ArrayList<String>();
+        if (!startPosition.isEmpty()) {
+            commands.add("-ss");
+            commands.add(startPosition);
+        }
+        if (!endPosition.isEmpty()) {
+            commands.add("-to");
+            commands.add(endPosition);
+        }
+        if (!duration.isEmpty()) {
+            commands.add("-t");
+            commands.add(duration);
+        }
+        return commands;
     }
 
     public StringJoiner describe() {

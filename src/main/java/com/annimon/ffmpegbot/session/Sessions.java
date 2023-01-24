@@ -4,21 +4,29 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Sessions {
-    private final Map<String, MediaSession> sessions;
+    private final Map<String, Session> sessions;
 
     public Sessions() {
         sessions = new ConcurrentHashMap<>();
     }
 
-    public MediaSession get(long chatId, long messageId) {
+    public Session get(long chatId, long messageId) {
         return sessions.get(mapKey(chatId, messageId));
     }
 
-    public void put(MediaSession mediaSession) {
+    public MediaSession getMediaSession(long chatId, long messageId) {
+        return (MediaSession) get(chatId, messageId);
+    }
+
+    public YtDlpSession getYtDlpSession(long chatId, long messageId) {
+        return (YtDlpSession) get(chatId, messageId);
+    }
+
+    public void put(Session mediaSession) {
         sessions.put(mapKey(mediaSession.getChatId(), mediaSession.getMessageId()), mediaSession);
     }
 
-    public void put(long chatId, long messageId, MediaSession mediaSession) {
+    public void put(long chatId, long messageId, Session mediaSession) {
         sessions.put(mapKey(chatId, messageId), mediaSession);
     }
 

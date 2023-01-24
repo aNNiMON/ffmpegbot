@@ -1,6 +1,5 @@
 package com.annimon.ffmpegbot.session;
 
-import com.annimon.ffmpegbot.parameters.InputParameters;
 import com.annimon.ffmpegbot.parameters.Parameter;
 
 import java.io.File;
@@ -9,10 +8,7 @@ import java.util.StringJoiner;
 
 import static com.annimon.ffmpegbot.TextUtils.*;
 
-public class MediaSession {
-    // Session key
-    private long chatId;
-    private int messageId;
+public final class MediaSession extends Session {
     // Media info
     private FileType fileType;
     private String fileId;
@@ -22,7 +18,6 @@ public class MediaSession {
     private String dimensions;
     // Parameters
     private List<Parameter<?>> params;
-    private final InputParameters inputParams = new InputParameters();
     // Files
     private File inputFile;
     private File outputFile;
@@ -36,22 +31,6 @@ public class MediaSession {
         this.setDuration(fileInfo.duration());
         this.setDimensions(fileInfo.width(), fileInfo.height());
         this.setOriginalFilename(fileInfo.filename());
-    }
-
-    public long getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(long chatId) {
-        this.chatId = chatId;
-    }
-
-    public int getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(int messageId) {
-        this.messageId = messageId;
     }
 
     public FileType getFileType() {
@@ -94,10 +73,6 @@ public class MediaSession {
         return params;
     }
 
-    public InputParameters getInputParams() {
-        return inputParams;
-    }
-
     public void setParams(List<Parameter<?>> params) {
         this.params = params;
     }
@@ -126,6 +101,7 @@ public class MediaSession {
         this.status = status;
     }
 
+    @Override
     public StringJoiner describe() {
         final var joiner = new StringJoiner("\n");
         joiner.add("Type: <code>%s</code>".formatted(fileType));

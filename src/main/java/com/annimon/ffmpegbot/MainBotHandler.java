@@ -41,7 +41,7 @@ public class MainBotHandler extends BotHandler {
         mediaProcessingBundle = new MediaProcessingBundle(sessions, fallbackFileDownloader);
         commands.registerBundle(mediaProcessingBundle);
         commands.registerBundle(new InputParametersBundle(sessions));
-        commands.registerBundle(new YtDlpCommandBundle());
+        commands.registerBundle(new YtDlpCommandBundle(sessions));
         commands.registerBundle(new AdminCommandBundle());
         commands.register(new HelpCommand());
     }

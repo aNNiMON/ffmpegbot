@@ -1,6 +1,8 @@
 package com.annimon.ffmpegbot.session;
 
-public class YtDlpSession {
+import java.util.StringJoiner;
+
+public final class YtDlpSession extends Session {
     private final String url;
     private final String downloadOption;
     private final FileType fileType;
@@ -30,5 +32,19 @@ public class YtDlpSession {
 
     public void setOutputFilename(String outputFilename) {
         this.outputFilename = outputFilename;
+    }
+
+    @Override
+    public StringJoiner describe() {
+        final var joiner = new StringJoiner("\n");
+        joiner.add("URL: <code>%s</code>".formatted(url));
+        joiner.add("Type: <code>%s</code>".formatted(fileType));
+        joiner.merge(inputParams.describe());
+        return joiner;
+    }
+
+    @Override
+    public String toString() {
+        return describe().toString();
     }
 }
