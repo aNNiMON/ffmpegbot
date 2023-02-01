@@ -15,7 +15,7 @@ public final class MediaSession extends Session {
     private String originalFilename;
     private Long fileSize;
     private Integer duration;
-    private String dimensions;
+    private String resolution;
     // Parameters
     private List<Parameter<?>> params;
     // Files
@@ -29,7 +29,7 @@ public final class MediaSession extends Session {
         this.setFileType(fileInfo.fileType());
         this.setFileSize(fileInfo.fileSize());
         this.setDuration(fileInfo.duration());
-        this.setDimensions(fileInfo.width(), fileInfo.height());
+        this.setResolution(fileInfo.width(), fileInfo.height());
         this.setOriginalFilename(fileInfo.filename());
     }
 
@@ -61,11 +61,11 @@ public final class MediaSession extends Session {
         this.duration = duration;
     }
 
-    public void setDimensions(Integer width, Integer height) {
+    public void setResolution(Integer width, Integer height) {
         if (width == null && height == null) {
-            this.dimensions = null;
+            this.resolution = null;
         } else {
-            this.dimensions = (width != null ? width : "?") + "x" + (height != null ? height : "?");
+            this.resolution = (width != null ? width : "?") + "x" + (height != null ? height : "?");
         }
     }
 
@@ -111,8 +111,8 @@ public final class MediaSession extends Session {
         if (duration != null && duration > 0) {
             joiner.add("Duration: <code>%s</code>".formatted(readableDuration(duration)));
         }
-        if (dimensions != null) {
-            joiner.add("Dimensions: <code>%s</code>".formatted(dimensions));
+        if (resolution != null) {
+            joiner.add("Resolution: <code>%s</code>".formatted(resolution));
         }
         joiner.merge(inputParams.describe());
         if (originalFilename != null) {

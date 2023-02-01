@@ -1,11 +1,14 @@
 package com.annimon.ffmpegbot.session;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.util.StringJoiner;
 
 public final class YtDlpSession extends Session {
     private final String url;
     private final String downloadOption;
     private final FileType fileType;
+    private YtDlpInfo additionalInfo;
     private String outputFilename;
 
     public YtDlpSession(String url, String downloadOption, FileType fileType) {
@@ -34,12 +37,27 @@ public final class YtDlpSession extends Session {
         this.outputFilename = outputFilename;
     }
 
+    public String getJsonInfoFilename() {
+        return FilenameUtils.getBaseName(outputFilename) + ".info.json";
+    }
+
+    public boolean hasAdditionalInfo() {
+        return additionalInfo != null;
+    }
+
+    public void setAdditionalInfo(YtDlpInfo additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
     @Override
     public StringJoiner describe() {
         final var joiner = new StringJoiner("\n");
         joiner.add("URL: <code>%s</code>".formatted(url));
         joiner.add("Type: <code>%s</code>".formatted(fileType));
         joiner.merge(inputParams.describe());
+        if (hasAdditionalInfo()) {
+            joiner.merge(additionalInfo.describe());
+        }
         return joiner;
     }
 

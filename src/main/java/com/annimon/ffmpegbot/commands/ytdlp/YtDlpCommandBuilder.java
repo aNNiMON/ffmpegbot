@@ -12,7 +12,32 @@ public class YtDlpCommandBuilder {
     public String[] buildCommand(final @NotNull YtDlpSession session) {
         final var commands = new ArrayList<String>();
         commands.add("yt-dlp");
-        // Format
+        commands.addAll(buildFormat(session));
+        // Trim
+        if (!session.getInputParams().isEmpty()) {
+            commands.addAll(List.of("--external-downloader", "ffmpeg"));
+            final String ffmpegArgs = String.join(" ", session.getInputParams().asFFmpegCommands());
+            commands.addAll(List.of("--external-downloader-args", "ffmpeg_i:" + ffmpegArgs));
+        }
+        commands.add(session.getUrl());
+        commands.addAll(buildOutput(session));
+        return commands.toArray(String[]::new);
+    }
+
+    public String[] buildInfoCommand(final @NotNull YtDlpSession session) {
+        final var commands = new ArrayList<String>();
+        commands.add("yt-dlp");
+        commands.add("--write-info-json");
+        commands.add("--no-download");
+        // --dump-json
+        commands.addAll(buildFormat(session));
+        commands.add(session.getUrl());
+        commands.addAll(buildOutput(session));
+        return commands.toArray(String[]::new);
+    }
+
+    private static List<String> buildFormat(@NotNull YtDlpSession session) {
+        final var commands = new ArrayList<String>();
         commands.add("-f");
         String downloadOption = session.getDownloadOption();
         if (downloadOption.equals("audio")) {
@@ -23,18 +48,11 @@ public class YtDlpCommandBuilder {
             final var other = "best";
             commands.add(String.join("/", List.of(mp4, any, other)));
         }
-        // Trim
-        if (!session.getInputParams().isEmpty()) {
-            commands.addAll(List.of("--external-downloader", "ffmpeg"));
-            final String ffmpegArgs = String.join(" ", session.getInputParams().asFFmpegCommands());
-            commands.addAll(List.of("--external-downloader-args", "ffmpeg_i:" + ffmpegArgs));
-        }
-        // Url
-        commands.add(session.getUrl());
-        // Output
-        commands.add("-o");
-        commands.add(FilePath.outputDir() + "/" + session.getOutputFilename());
-        System.out.println(String.join(" ", commands));
-        return commands.toArray(String[]::new);
+        return commands;
+    }
+
+    private static List<String> buildOutput(@NotNull YtDlpSession session) {
+        final var targetFilename = FilePath.outputDir() + "/" + session.getOutputFilename();
+        return List.of("-o", targetFilename);
     }
 }

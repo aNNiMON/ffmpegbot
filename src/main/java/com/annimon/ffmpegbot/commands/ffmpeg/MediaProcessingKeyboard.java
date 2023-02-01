@@ -28,6 +28,9 @@ public class MediaProcessingKeyboard {
 
     public static InlineKeyboardMarkup createKeyboard(YtDlpSession session) {
         final var keyboard = new ArrayList<List<InlineKeyboardButton>>();
+        if (!session.hasAdditionalInfo()) {
+            keyboard.add(List.of(inlineKeyboardButton("Get info", callbackData(YTDLP_INFO))));
+        }
         keyboard.add(List.of(inlineKeyboardButton("Start", callbackData(YTDLP_START))));
         return new InlineKeyboardMarkup(keyboard);
     }

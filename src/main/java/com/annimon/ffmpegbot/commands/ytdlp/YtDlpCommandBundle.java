@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -37,9 +39,13 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
                 Permissions.ALLOWED_USERS,
                 this::download));
         commands.register(new SimpleCallbackQueryCommand(
+                CallbackQueryCommands.YTDLP_INFO,
+                Permissions.ALLOWED_USERS,
+                sessionCommand(this::ytDlpInfo)));
+        commands.register(new SimpleCallbackQueryCommand(
                 CallbackQueryCommands.YTDLP_START,
                 Permissions.ALLOWED_USERS,
-                this::ytDlpStart));
+                sessionCommand(this::ytDlpStart)));
     }
 
     private void download(@NotNull RegexMessageContext ctx) {
@@ -67,14 +73,27 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
                 .call(ctx.sender);
     }
 
-    private void ytDlpStart(CallbackQueryContext ctx) {
-        final var msg = ctx.message();
-        if (msg == null) return;
+    private void ytDlpInfo(CallbackQueryContext ctx, YtDlpSession session) {
+        CompletableFuture.runAsync(() -> new YtDlpTask().getInfo(session))
+                .thenRun(() -> {
+                    Methods.editMessageText()
+                            .setChatId(session.getChatId())
+                            .setMessageId(session.getMessageId())
+                            .setText(session.toString())
+                            .enableHtml()
+                            .disableWebPagePreview()
+                            .setReplyMarkup(createKeyboard(session))
+                            .callAsync(ctx.sender);
+                })
+                .exceptionally(throwable -> {
+                    ctx.answerAsAlert("Failed due to " + throwable.getMessage())
+                            .callAsync(ctx.sender);
+                    return null;
+                });
+    }
 
-        final var session = sessions.getYtDlpSession(msg.getChatId(), msg.getMessageId());
-        if (session == null) return;
-
-        Methods.sendChatAction(msg.getChatId(), Resolver.resolveAction(session.getFileType()))
+    private void ytDlpStart(CallbackQueryContext ctx, YtDlpSession session) {
+        Methods.sendChatAction(ctx.message().getChatId(), Resolver.resolveAction(session.getFileType()))
                 .callAsync(ctx.sender);
         CompletableFuture.runAsync(() -> new YtDlpTask().process(session))
                 .thenRunAsync(() -> {
@@ -92,5 +111,17 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
                             .callAsync(ctx.sender);
                     return null;
                 });
+    }
+
+    private Consumer<CallbackQueryContext> sessionCommand(BiConsumer<CallbackQueryContext, YtDlpSession> consumer) {
+        return ctx -> {
+            final var msg = ctx.message();
+            if (msg == null) return;
+
+            final var session = sessions.getYtDlpSession(msg.getChatId(), msg.getMessageId());
+            if (session == null) return;
+
+            consumer.accept(ctx, session);
+        };
     }
 }
