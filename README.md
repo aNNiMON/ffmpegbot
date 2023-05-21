@@ -20,6 +20,16 @@ Telegram Bot for re-encoding media
 
 ## Installation
 
+### Using Docker
+
+```bash
+cp ffmpegbot.yaml.template ffmpegbot.yaml
+vim ffmpegbot.yaml
+docker build --tag 'ffmpegbot' .
+```
+
+### Manual
+
 ```bash
 # Build
 ./gradlew shadowJar
