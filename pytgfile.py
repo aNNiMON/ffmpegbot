@@ -1,5 +1,7 @@
 import argparse
 import asyncio
+import traceback
+import logging
 import pathlib
 import pyrogram
 import pyrogram.file_id
@@ -58,6 +60,8 @@ if __name__ == '__main__':
 
     try:
         asyncio.run(args.func(args))
+    except Exception as e:
+        logging.error(traceback.format_exc())
     except:
         exit(1)
 

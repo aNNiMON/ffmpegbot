@@ -1,0 +1,11 @@
+botToken: env(BOT_TOKEN)
+botUsername: env(BOT_USERNAME)
+# Telegram API app_id / app_hash
+appId: env(APP_ID)
+appHash: env(APP_HASH)
+# Path to Telegram API file downloader script
+downloaderScript: pytgfile.py
+# Superusers can execute /run command
+superUsers: [12345]
+# Allowed user ids
+allowedUsers: [12346, 12347]

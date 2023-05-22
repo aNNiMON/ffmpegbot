@@ -14,10 +14,12 @@ RUN GRADLE_OPTS="-Xmx256m" gradle shadowJar --build-cache --stacktrace --no-daem
 FROM eclipse-temurin:17-jre-alpine
 RUN apk add --no-cache python3 py3-pip ffmpeg \
   && python3 -m pip install --upgrade wheel \
-  && python3 -m pip install --upgrade yt-dlp
+  && python3 -m pip install --upgrade yt-dlp \
+  && python3 -m pip install --upgrade pyrogram \
+  && python3 -m pip install --upgrade TgCrypto
 WORKDIR /app
 COPY --from=builder /usr/src/java-code/build/libs/ffmpegbot-1.0-SNAPSHOT-all.jar .
 RUN mkdir input && mkdir output
 COPY pytgfile.py .
-COPY ffmpegbot.yaml .
-ENTRYPOINT ["java", "-jar", "/app/ffmpegbot-1.0-SNAPSHOT-all.jar"]
+COPY ffmpegbot-docker.yaml .
+ENTRYPOINT ["java", "-jar", "/app/ffmpegbot-1.0-SNAPSHOT-all.jar", "docker"]

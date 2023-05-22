@@ -1,4 +1,4 @@
-# ffmpegbot
+_# ffmpegbot
 
 Telegram Bot for re-encoding media
 
@@ -20,14 +20,6 @@ Telegram Bot for re-encoding media
 
 ## Installation
 
-### Using Docker
-
-```bash
-cp ffmpegbot.yaml.template ffmpegbot.yaml
-vim ffmpegbot.yaml
-docker build --tag 'ffmpegbot' .
-```
-
 ### Manual
 
 ```bash
@@ -40,3 +32,28 @@ mkdir {input,output}
 # Run
 java -jar ./build/libs/ffmpegbot-1.0-SNAPSHOT-all.jar
 ```
+
+
+### Using Docker
+
+Note: FFmpeg binary might be installed with limited number of filters and codecs. Some bot features might not work (Audio pitch, robot effect, etc).
+
+```bash
+# Edit user ids in `superUsers` and `allowedUsers` fields
+vim ffmpegbot-docker.yaml
+docker build --tag 'ffmpegbot' .
+docker run -d -t -i \
+  -e BOT_TOKEN='...' \
+  -e BOT_USERNAME='...' \
+  -e APP_ID='...' \
+  -e APP_HASH='...'\
+  --name ffmpegbot ffmpegbot:latest
+```
+
+#### Environment variables
+
+ - `BOT_TOKEN` — Telegram bot token
+ - `BOT_USERNAME` — Telegram bot username
+ - `APP_ID` — Telegram API app_id (see https://core.telegram.org/api/obtaining_api_id)
+ - `APP_HASH` — Telegram API app_hash
+
