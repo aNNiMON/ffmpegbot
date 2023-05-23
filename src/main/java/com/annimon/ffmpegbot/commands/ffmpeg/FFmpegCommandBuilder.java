@@ -73,6 +73,13 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
     }
 
     @Override
+    public void visit(AudioStreamByLanguage p, MediaSession input) {
+        if (discardAudio) return;
+        if (p.getValue().isEmpty()) return;
+        audioCommands.add("-map 0:m:language:" + p.getValue());
+    }
+
+    @Override
     public void visit(SpeedFactor p, MediaSession input) {
         if (p.getValue().equals("1")) return;
         if (!discardAudio) {

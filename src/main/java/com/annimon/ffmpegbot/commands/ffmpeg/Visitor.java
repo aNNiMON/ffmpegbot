@@ -8,6 +8,7 @@ public interface Visitor<I> {
     void visit(AudioEffect p, I input);
     void visit(AudioPitch p, I input);
     void visit(AudioVolume p, I input);
+    void visit(AudioStreamByLanguage p, I input);
     void visit(SpeedFactor p, I input);
     void visit(VideoBitrate p, I input);
     void visit(VideoScale p, I input);

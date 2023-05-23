@@ -30,6 +30,7 @@ public class Parameters {
                 new AudioEffect(),
                 new AudioPitch(),
                 new AudioVolume(),
+                new AudioStreamByLanguage(),
                 new VideoBitrate(),
                 new VideoScale(),
                 new VideoFrameRate(),
