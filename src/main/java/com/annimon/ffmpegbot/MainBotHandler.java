@@ -15,10 +15,7 @@ import com.annimon.tgbotsmodule.commands.authority.For;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.util.EnumSet;
 
 public class MainBotHandler extends BotHandler {
     private final BotConfig botConfig;
@@ -27,9 +24,10 @@ public class MainBotHandler extends BotHandler {
     private final MediaProcessingBundle mediaProcessingBundle;
 
     public MainBotHandler(BotConfig botConfig) {
+        super(botConfig.botToken());
         this.botConfig = botConfig;
         permissions = new Permissions(botConfig.superUsers(), botConfig.allowedUsers());
-        commands = new CommandRegistry<>(this, this::checkAccess);
+        commands = new CommandRegistry<>(botConfig.botUsername(), permissions);
         final var sessions = new Sessions();
         final var fallbackFileDownloader = new FallbackFileDownloader(
                 new TelegramFileDownloader(),
@@ -48,7 +46,7 @@ public class MainBotHandler extends BotHandler {
 
     @Override
     protected BotApiMethod<?> onUpdate(@NotNull Update update) {
-        if (commands.handleUpdate(update)) {
+        if (commands.handleUpdate(this, update)) {
             return null;
         }
         if (update.hasMessage() && permissions.isUserAllowed(update.getMessage().getFrom().getId())) {
@@ -60,16 +58,6 @@ public class MainBotHandler extends BotHandler {
     @Override
     public String getBotUsername() {
         return botConfig.botUsername();
-    }
-
-    @Override
-    public String getBotToken() {
-        return botConfig.botToken();
-    }
-
-    private boolean checkAccess(Update update, @NotNull User user, @NotNull EnumSet<For> roles) {
-        final long userId = user.getId();
-        return permissions.hasAccess(userId, roles);
     }
 
     @Override

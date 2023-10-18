@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java'
     id 'application'
 }
@@ -21,8 +21,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.annimon:tgbots-module:6.3.1'
-    implementation 'org.slf4j:slf4j-simple:2.0.5'
+    implementation 'com.annimon:tgbots-module:6.5.1'
+    implementation 'org.slf4j:slf4j-simple:2.0.9'
 }
 
 test {
