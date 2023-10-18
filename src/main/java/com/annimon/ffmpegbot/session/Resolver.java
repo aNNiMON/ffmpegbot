@@ -28,6 +28,19 @@ public class Resolver {
         } else if (message.hasVoice()) {
             final var att = message.getVoice();
             return new FileInfo(FileType.VOICE, att.getFileId(), null, att.getFileSize(), att.getDuration());
+        } else if (message.hasDocument()) {
+            final var att = message.getDocument();
+            final var mimeType = att.getMimeType();
+            if (mimeType == null || att.getFileSize() == null || att.getFileSize() == 0) {
+                return null;
+            } else if (mimeType.startsWith("video/")) {
+                return new FileInfo(FileType.VIDEO, att.getFileId(), att.getFileName(),
+                        att.getFileSize(), null);
+            } else if (mimeType.startsWith("audio/")) {
+                return new FileInfo(FileType.AUDIO, att.getFileId(), att.getFileName(),
+                        att.getFileSize(), null);
+            }
+            return null;
         } else {
             return null;
         }
