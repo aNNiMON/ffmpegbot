@@ -4,6 +4,8 @@ import com.annimon.ffmpegbot.file.FileDownloadException;
 import com.annimon.ffmpegbot.file.FileDownloader;
 import com.annimon.ffmpegbot.parameters.Parameter;
 import com.annimon.ffmpegbot.file.FilePath;
+import com.annimon.ffmpegbot.parameters.resolvers.GlobalParametersResolver;
+import com.annimon.ffmpegbot.parameters.resolvers.ParametersResolver;
 import com.annimon.ffmpegbot.session.MediaSession;
 import com.annimon.ffmpegbot.session.Resolver;
 import com.annimon.ffmpegbot.session.Sessions;
@@ -17,6 +19,7 @@ import com.annimon.tgbotsmodule.services.CommonAbsSender;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -30,10 +33,12 @@ public class MediaProcessingBundle implements CommandBundle<For> {
 
     private final Sessions sessions;
     private final FileDownloader fileDownloader;
+    private final ParametersResolver parametersResolver;
 
     public MediaProcessingBundle(Sessions sessions, FileDownloader fileDownloader) {
         this.sessions = sessions;
         this.fileDownloader = fileDownloader;
+        this.parametersResolver = new GlobalParametersResolver();
     }
 
     @Override
@@ -51,7 +56,10 @@ public class MediaProcessingBundle implements CommandBundle<For> {
         final var session = new MediaSession();
         session.setChatId(message.getChatId());
         session.fromFileInfo(fileInfo);
-        session.setParams(Resolver.resolveParameters(fileInfo.fileType()));
+
+        final var params = new ArrayList<Parameter<?>>();
+        parametersResolver.resolve(params, fileInfo);
+        session.setParams(params);
 
         final var result = Methods.sendMessage()
                 .setChatId(message.getChatId())
