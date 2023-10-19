@@ -9,6 +9,10 @@ public record FileInfo(FileType fileType, String fileId, String filename,
         this(fileType, fileId, filename, fileSize, duration, null, null);
     }
 
+    public int getDuration() {
+        return duration != null ? duration : 0;
+    }
+
     public String getExtension() {
         return FilenameUtils.getExtension(filename).toLowerCase(Locale.ROOT);
     }

@@ -4,6 +4,8 @@ import com.annimon.ffmpegbot.parameters.OutputFormat;
 import com.annimon.ffmpegbot.parameters.Parameter;
 import com.annimon.ffmpegbot.session.FileInfo;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import static com.annimon.ffmpegbot.parameters.OutputFormat.*;
 
@@ -12,12 +14,31 @@ public class OutputFormatResolver implements ParametersResolver {
     @Override
     public void resolve(@NotNull List<Parameter<?>> parameters, @NotNull FileInfo fileInfo) {
         final var outputFormat = switch (fileInfo.fileType()) {
-            case VIDEO -> new OutputFormat(List.of(VIDEO, AUDIO), VIDEO);
+            case VIDEO -> forVideo(fileInfo);
             case VIDEO_NOTE -> new OutputFormat(List.of(VIDEO_NOTE, VIDEO, AUDIO), VIDEO_NOTE);
+            case ANIMATION -> forAnimation(fileInfo);
             default -> null;
         };
         if (outputFormat != null) {
             parameters.add(outputFormat);
         }
+    }
+
+    @NotNull
+    private static OutputFormat forVideo(@NotNull FileInfo fileInfo) {
+        final var types = new ArrayList<String>(3);
+        types.add(VIDEO);
+        if (fileInfo.getDuration() < 60 && fileInfo.getExtension().equals("mp4")) {
+            types.add(VIDEO_NOTE);
+        }
+        types.add(AUDIO);
+        return new OutputFormat(types, VIDEO);
+    }
+
+    @Nullable
+    private static OutputFormat forAnimation(@NotNull FileInfo fileInfo) {
+        if (fileInfo.getExtension().equals("mp4")) return null;
+        // webm sticker:
+        return new OutputFormat(List.of(VIDEO, VIDEO_NOTE), VIDEO);
     }
 }
