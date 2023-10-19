@@ -41,6 +41,13 @@ public class Resolver {
                         att.getFileSize(), null);
             }
             return null;
+        } else if (message.hasSticker()) {
+            final var att = message.getSticker();
+            if (att.getIsVideo()) {
+                long fileSize = att.getFileSize() != null ? att.getFileSize().longValue() : 0L;
+                return new FileInfo(FileType.ANIMATION, att.getFileId(), "sticker.webm", fileSize, null);
+            }
+            return null;
         } else {
             return null;
         }
