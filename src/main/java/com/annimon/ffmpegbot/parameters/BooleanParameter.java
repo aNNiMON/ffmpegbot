@@ -8,16 +8,11 @@ public abstract class BooleanParameter extends Parameter<Boolean> {
     }
 
     @Override
-    public String describe() {
+    public String describeValue(Boolean value) {
         if (value) {
-            return describeValue("ON");
+            return "ON";
         } else {
-            return describeValue("OFF");
+            return "OFF";
         }
-    }
-
-    @Override
-    protected void toggle(int dir) {
-        value = !value;
     }
 }

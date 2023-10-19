@@ -15,11 +15,11 @@ public class VideoBitrate extends StringParameter {
     }
 
     @Override
-    public String describe() {
+    public String describeValue(String value) {
         if (value.isEmpty()) {
-            return describeValue("AUTO");
+            return "AUTO";
         } else {
-            return super.describe();
+            return super.describeValue(value);
         }
     }
 

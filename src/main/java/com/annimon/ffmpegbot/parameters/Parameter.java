@@ -30,41 +30,38 @@ public abstract class Parameter<T> {
         return value;
     }
 
-    public List<? extends T> getPossibleValues() {
-        return possibleValues;
+    public int getPossibleValuesSize() {
+        return possibleValues.size();
     }
+
 
     public abstract <I> void accept(Visitor<I> visitor, I input);
 
-    public String describe() {
-        return describeValue(Objects.toString(value));
+    public final String describe() {
+        return displayName + ": " + describeValue(value);
     }
 
-    protected final String describeValue(String customValue) {
-        return displayName + ": " + customValue;
+    public final String describeValueByIndex(int index) {
+        return describeValue(safeGet(index));
     }
 
-    public void toggleLeft() {
-        toggle(-1);
+    protected String describeValue(T valueToDescribe) {
+        return Objects.toString(valueToDescribe);
     }
 
-    public void toggleRight() {
-        toggle(+1);
-    }
-
-    protected void toggle(int dir) {
-        final int size = possibleValues.size();
-        if (size == 1) return;
-
-        int nextIndex = possibleValues.indexOf(value) + dir;
-        if (nextIndex >= size) nextIndex -= size;
-        else if (nextIndex < 0) nextIndex += size;
-
-        value = possibleValues.get(nextIndex);
+    public void select(int index) {
+        value = safeGet(index);
     }
 
     @Override
     public String toString() {
         return "[" + id + "] " + displayName + ": " + value;
+    }
+
+    private T safeGet(int index) {
+        final int size = possibleValues.size();
+        if (index >= size) index = size - 1;
+        else if (index < 0) index = 0;
+        return possibleValues.get(index);
     }
 }

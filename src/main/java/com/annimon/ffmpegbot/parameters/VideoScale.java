@@ -14,11 +14,11 @@ public class VideoScale extends StringParameter {
     }
 
     @Override
-    public String describe() {
+    public String describeValue(String value) {
         if (value.isEmpty()) {
-            return describeValue("ORIGINAL");
+            return "ORIGINAL";
         } else {
-            return describeValue(value + "p");
+            return value + "p";
         }
     }
 

@@ -14,11 +14,11 @@ public class VideoFrameRate extends StringParameter {
     }
 
     @Override
-    public String describe() {
+    public String describeValue(String value) {
         if (value.isEmpty()) {
-            return describeValue("ORIGINAL");
+            return "ORIGINAL";
         } else {
-            return super.describe();
+            return super.describeValue(value);
         }
     }
 

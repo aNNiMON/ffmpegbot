@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static com.annimon.ffmpegbot.Permissions.ALLOWED_USERS;
 import static com.annimon.ffmpegbot.commands.ffmpeg.CallbackQueryCommands.*;
@@ -43,9 +42,7 @@ public class MediaProcessingBundle implements CommandBundle<For> {
 
     @Override
     public void register(@NotNull CommandRegistry commands) {
-        commands.register(new SimpleCallbackQueryCommand(PREV, ALLOWED_USERS, ctx -> toggleParameter(ctx, true)));
-        commands.register(new SimpleCallbackQueryCommand(NEXT, ALLOWED_USERS, ctx -> toggleParameter(ctx, false)));
-        commands.register(new SimpleCallbackQueryCommand(DETAIL, ALLOWED_USERS, sessionCommand(this::details)));
+        commands.register(new SimpleCallbackQueryCommand(PARAMETER, ALLOWED_USERS, sessionCommand(this::parameter)));
         commands.register(new SimpleCallbackQueryCommand(PROCESS, ALLOWED_USERS, sessionCommand(this::process)));
     }
 
@@ -76,36 +73,24 @@ public class MediaProcessingBundle implements CommandBundle<For> {
                 .call(sender);
     }
 
-    private void toggleParameter(final CallbackQueryContext ctx, final boolean toLeft) {
-        final var msg = ctx.message();
-        if (msg == null) return;
+    private void parameter(final CallbackQueryContext ctx, final MediaSession session) {
+        if (ctx.argumentsLength() == 0) {
+            session.setSelectedParam(null);
+        } else {
+            final String id = ctx.argument(0);
+            final var param = session.getParams().stream()
+                    .filter(p -> p.getId().equals(id))
+                    .findFirst().orElse(null);
 
-        final var session = sessions.getMediaSession(msg.getChatId(), msg.getMessageId());
-        if (session == null) return;
+            session.setSelectedParam(param);
 
-        final String id = ctx.argument(0);
-        final var parameters = session.getParams().stream()
-                .filter(p -> p.getId().equals(id))
-                .collect(Collectors.toSet());
-        if (parameters.isEmpty()) return;
-
-        for (Parameter<?> param : parameters) {
-            if (toLeft) {
-                param.toggleLeft();
-            } else {
-                param.toggleRight();
+            if (param != null && ctx.argumentsLength() == 2) {
+                final int index = Integer.parseInt(ctx.argument(1));
+                param.select(index);
+                session.setSelectedParam(null);
             }
         }
         editMessage(ctx, session);
-    }
-
-    private void details(final CallbackQueryContext ctx, final MediaSession session) {
-        final String id = ctx.argument(0);
-        session.getParams().stream()
-                .filter(p -> p.getId().equals(id))
-                .findFirst()
-                .ifPresent(p ->
-                        ctx.answerAsAlert(p.describe()).callAsync(ctx.sender));
     }
 
     private void process(final CallbackQueryContext ctx, final MediaSession session) {

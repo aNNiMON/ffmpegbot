@@ -20,11 +20,11 @@ public class AudioEffect extends StringParameter {
     }
 
     @Override
-    public String describe() {
+    public String describeValue(String value) {
         if (value.isEmpty()) {
-            return describeValue("NONE");
+            return "NONE";
         } else {
-            return super.describe();
+            return super.describeValue(value);
         }
     }
 

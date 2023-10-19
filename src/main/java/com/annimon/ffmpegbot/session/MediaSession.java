@@ -17,6 +17,7 @@ public final class MediaSession extends Session {
     private Integer duration;
     private String resolution;
     // Parameters
+    private Parameter<?> selectedParam;
     private List<Parameter<?>> params;
     // Files
     private File inputFile;
@@ -77,6 +78,14 @@ public final class MediaSession extends Session {
         this.params = params;
     }
 
+    public void setSelectedParam(Parameter<?> selectedParam) {
+        this.selectedParam = selectedParam;
+    }
+
+    public Parameter<?> getSelectedParam() {
+        return selectedParam;
+    }
+
     public boolean isDownloaded() {
         return (inputFile != null) && (inputFile.canRead());
     }
@@ -127,6 +136,9 @@ public final class MediaSession extends Session {
         }
         if (status != null) {
             joiner.add("<i>" + safeHtml(status) + "</i>");
+        }
+        if (selectedParam != null) {
+            joiner.add(safeHtml(selectedParam.describe()));
         }
         return joiner;
     }
