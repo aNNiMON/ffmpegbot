@@ -76,7 +76,8 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
     public void visit(AudioStreamByLanguage p, MediaSession input) {
         if (discardAudio) return;
         if (p.getValue().isEmpty()) return;
-        audioCommands.add("-map 0:m:language:" + p.getValue());
+        audioCommands.add("-map");
+        audioCommands.add("0:m:language:" + p.getValue());
     }
 
     @Override
@@ -135,7 +136,7 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
 
     public String[] buildCommand(final @NotNull MediaSession session) {
         final var commands = new ArrayList<String>();
-        commands.addAll(List.of("ffmpeg", "-loglevel", "quiet", "-stats"));
+        commands.addAll(List.of("ffmpeg", "-loglevel", "error", "-stats"));
         commands.addAll(session.getInputParams().asFFmpegCommands());
         commands.addAll(List.of("-i", FilePath.inputDir() + "/" + session.getInputFile().getName()));
         if (FileTypes.canContainAudio(session.getFileType())) {

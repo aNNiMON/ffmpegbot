@@ -3,8 +3,10 @@ package com.annimon.ffmpegbot.commands.ffmpeg;
 import com.annimon.ffmpegbot.parameters.Parameter;
 import com.annimon.ffmpegbot.session.MediaSession;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
+import java.util.StringJoiner;
 
 public class FFmpegTask {
 
@@ -19,13 +21,20 @@ public class FFmpegTask {
             pb.redirectErrorStream(true);
             pb.inheritIO();
             session.setStatus("Starting ffmpeg");
-            final Process process = pb.start();
-            final Scanner out = new Scanner(process.getInputStream());
-            while (out.hasNextLine()) {
-                final String line = out.nextLine();
-                session.setStatus(line);
+            final var process = pb.start();
+            final var lines = new StringJoiner("\n");
+            try (final var reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    lines.add(line);
+                    session.setStatus(line);
+                }
+                int status = process.waitFor();
+                if (status != 0) {
+                    session.setStatus(lines.toString());
+                    throw new RuntimeException("ffmpeg process was finished with non-zero value " + status);
+                }
             }
-            process.waitFor();
         } catch (InterruptedException | IOException e) {
             session.setStatus("Failed due to " + e.getMessage());
             throw new RuntimeException(e);
