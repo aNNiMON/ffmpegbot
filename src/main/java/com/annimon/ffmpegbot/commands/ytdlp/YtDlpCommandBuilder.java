@@ -42,6 +42,8 @@ public class YtDlpCommandBuilder {
         String downloadOption = session.getDownloadOption();
         if (downloadOption.equals("audio")) {
             commands.add("bestaudio[ext=m4a]/bestaudio");
+        } else if (downloadOption.equals("best")) {
+            commands.add("best");
         } else {
             final var mp4 = "bestvideo[ext=mp4][height<=%s]+bestaudio[ext=m4a]".formatted(downloadOption);
             final var any = "bestvideo[height<=%s]+bestaudio".formatted(downloadOption);

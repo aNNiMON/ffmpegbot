@@ -35,7 +35,7 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
     @Override
     public void register(@NotNull CommandRegistry commands) {
         commands.register(new SimpleRegexCommand(
-                Pattern.compile("/dl (https?://[^ ]+) ?(audio|\\d+)?p?"),
+                Pattern.compile("/dl (https?://[^ ]+) ?(audio|best|\\d+)?"),
                 Permissions.ALLOWED_USERS,
                 this::download));
         commands.register(new SimpleCallbackQueryCommand(
@@ -52,7 +52,7 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
         final String url = ctx.group(1);
         final String downloadOption = Optional.ofNullable(ctx.group(2))
                 .filter(Predicate.not(String::isBlank))
-                .orElse("720");
+                .orElse("best");
 
         final var message = ctx.message();
         final var fileType = downloadOption.equals("audio") ? FileType.AUDIO : FileType.VIDEO;
