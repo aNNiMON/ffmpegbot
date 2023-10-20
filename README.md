@@ -1,4 +1,4 @@
-_# ffmpegbot
+# ffmpegbot
 
 Telegram Bot for re-encoding media
 
