@@ -23,6 +23,11 @@ public class AudioStreamByLanguage extends StringParameter {
     }
 
     @Override
+    public int defaultColumnsCount() {
+        return 3;
+    }
+
+    @Override
     public <I> void accept(Visitor<I> visitor, I input) {
         visitor.visit(this, input);
     }

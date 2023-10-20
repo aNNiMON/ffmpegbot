@@ -53,6 +53,10 @@ public abstract class Parameter<T> {
         value = safeGet(index);
     }
 
+    public int defaultColumnsCount() {
+        return 2;
+    }
+
     @Override
     public String toString() {
         return "[" + id + "] " + displayName + ": " + value;

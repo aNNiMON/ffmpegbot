@@ -49,9 +49,10 @@ public class MediaProcessingKeyboard {
         final String paramId = param.getId();
         final int maxSize = param.getPossibleValuesSize();
         int index = 0;
+        final int columnsCount = param.defaultColumnsCount();
         while (index < maxSize) {
             final var row = new ArrayList<InlineKeyboardButton>();
-            for (int i = 0; i < BUTTON_COLUMNS; i++) {
+            for (int i = 0; i < columnsCount; i++) {
                 if (index < maxSize) {
                     String value = param.describeValueByIndex(index);
                     row.add(inlineKeyboardButton(value, callbackData(PARAMETER, callbackParams(paramId, index))));

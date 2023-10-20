@@ -24,6 +24,11 @@ public class VideoBitrate extends StringParameter {
     }
 
     @Override
+    public int defaultColumnsCount() {
+        return 4;
+    }
+
+    @Override
     public <I> void accept(Visitor<I> visitor, I input) {
         visitor.visit(this, input);
     }
