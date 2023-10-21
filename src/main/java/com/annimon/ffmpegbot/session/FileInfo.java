@@ -14,6 +14,7 @@ public record FileInfo(FileType fileType, String fileId, String filename,
     }
 
     public String getExtension() {
+        if (filename == null) return "";
         return FilenameUtils.getExtension(filename).toLowerCase(Locale.ROOT);
     }
 }
