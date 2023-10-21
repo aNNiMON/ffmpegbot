@@ -16,6 +16,9 @@ public class VideoResolver implements ParametersResolver {
 
         if (hasVideo) {
             parameters.addAll(List.of(
+                    new Contrast(),
+                    new Gamma(),
+                    new Saturation(),
                     new VideoBitrate(),
                     new VideoScale(),
                     new VideoFrameRate()

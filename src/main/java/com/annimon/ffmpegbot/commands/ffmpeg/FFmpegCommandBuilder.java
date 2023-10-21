@@ -18,12 +18,14 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
     private final List<String> videoCommands;
     private final List<String> audioFilters;
     private final List<String> videoFilters;
+    private final List<String> eq;
 
     public FFmpegCommandBuilder() {
         audioCommands = new ArrayList<>();
         videoCommands = new ArrayList<>();
         audioFilters = new ArrayList<>();
         videoFilters = new ArrayList<>();
+        eq = new ArrayList<>();
     }
 
     @Override
@@ -78,6 +80,27 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
         if (p.getValue().isEmpty()) return;
         audioCommands.add("-map");
         audioCommands.add("0:m:language:" + p.getValue());
+    }
+
+    @Override
+    public void visit(Contrast p, MediaSession input) {
+        String value = p.getValue();
+        if (value.equals("1")) return;
+        eq.add("contrast=" + value);
+    }
+
+    @Override
+    public void visit(Gamma p, MediaSession input) {
+        String value = p.getValue();
+        if (value.equals("1")) return;
+        eq.add("gamma=" + value);
+    }
+
+    @Override
+    public void visit(Saturation p, MediaSession input) {
+        String value = p.getValue();
+        if (value.equals("1")) return;
+        eq.add("saturation=" + value);
     }
 
     @Override
@@ -148,6 +171,9 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
         }
         if (FileTypes.canContainVideo(session.getFileType())) {
             commands.addAll(videoCommands);
+            if (!eq.isEmpty()) {
+                videoFilters.add("eq=" + String.join(":", eq));
+            }
             if (!videoFilters.isEmpty()) {
                 commands.add("-vf");
                 commands.add(String.join(",", videoFilters));
