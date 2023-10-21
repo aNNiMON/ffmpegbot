@@ -55,6 +55,6 @@ public class YtDlpCommandBuilder {
 
     private static List<String> buildOutput(@NotNull YtDlpSession session) {
         final var targetFilename = FilePath.outputDir() + "/" + session.getOutputFilename();
-        return List.of("-o", targetFilename);
+        return List.of("--force-overwrites", "-o", targetFilename);
     }
 }

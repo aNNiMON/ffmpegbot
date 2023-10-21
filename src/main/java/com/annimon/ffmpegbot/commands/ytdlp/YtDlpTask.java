@@ -34,7 +34,10 @@ public class YtDlpTask {
             pb.redirectErrorStream(true);
             pb.inheritIO();
             final Process process = pb.start();
-            process.waitFor();
+            int status = process.waitFor();
+            if (status != 0) {
+                throw new RuntimeException("yt-dlp process was finished with non-zero value " + status);
+            }
         } catch (InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }
