@@ -40,7 +40,7 @@ public class HelpCommand implements TextCommand {
                 <b>yt-dlp</b>
                 /dl link [format] — download a media using yt-dlp
                   <code>link</code> — a link to download (it must be supported by yt-dlp)
-                  <code>format</code> — (optional) a download format. Can be "audio", "240", "360", "480", "720" or "1080"
+                  <code>format</code> — (optional) a download format. Can be "best", "audio", "240", "360", "480", "720" or "1080"
                 """.stripIndent()).enableHtml().callAsync(ctx.sender);
     }
 }

@@ -2,12 +2,25 @@ package com.annimon.ffmpegbot.session;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 public class Sessions {
     private final Map<String, Session> sessions;
 
     public Sessions() {
         sessions = new ConcurrentHashMap<>();
+    }
+
+    public void clear() {
+        sessions.clear();
+    }
+
+    public int getSize() {
+        return sessions.size();
+    }
+
+    public Stream<Session> sessions() {
+        return sessions.values().stream();
     }
 
     public Session get(long chatId, long messageId) {

@@ -2,6 +2,7 @@ package com.annimon.ffmpegbot.session;
 
 import com.annimon.ffmpegbot.parameters.InputParameters;
 
+import java.time.Instant;
 import java.util.StringJoiner;
 
 public abstract sealed class Session permits MediaSession, YtDlpSession {
@@ -10,6 +11,8 @@ public abstract sealed class Session permits MediaSession, YtDlpSession {
     protected int messageId;
     // Parameters
     protected final InputParameters inputParams = new InputParameters();
+    // Meta
+    private final Instant instant = Instant.now();
 
     public long getChatId() {
         return chatId;
@@ -29,6 +32,10 @@ public abstract sealed class Session permits MediaSession, YtDlpSession {
 
     public InputParameters getInputParams() {
         return inputParams;
+    }
+
+    public Instant getInstant() {
+        return instant;
     }
 
     abstract StringJoiner describe();

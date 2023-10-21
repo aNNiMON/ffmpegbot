@@ -54,12 +54,24 @@ public final class MediaSession extends Session {
         this.originalFilename = originalFilename;
     }
 
+    public String getOriginalFilename() {
+        return originalFilename;
+    }
+
     public void setFileSize(Long fileSize) {
         this.fileSize = fileSize;
     }
 
+    public Long getFileSize() {
+        return fileSize;
+    }
+
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 
     public void setResolution(Integer width, Integer height) {

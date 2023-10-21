@@ -40,7 +40,7 @@ public class MainBotHandler extends BotHandler {
         commands.registerBundle(mediaProcessingBundle);
         commands.registerBundle(new InputParametersBundle(sessions));
         commands.registerBundle(new YtDlpCommandBundle(sessions));
-        commands.registerBundle(new AdminCommandBundle());
+        commands.registerBundle(new AdminCommandBundle(sessions));
         commands.register(new HelpCommand());
     }
 
