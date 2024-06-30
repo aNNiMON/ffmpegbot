@@ -10,7 +10,7 @@ public class OutputFormat extends StringParameter {
     public static final String VIDEO_NOTE = "VIDEO NOTE";
 
     public OutputFormat(List<String> values, String initialValue) {
-        super("output", "Output", values, initialValue);
+        super("output", "➡\uFE0F Output", values, initialValue);
     }
 
     @Override
