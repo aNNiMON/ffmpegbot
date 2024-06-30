@@ -6,7 +6,7 @@ plugins {
 
 mainClassName = 'com.annimon.ffmpegbot.Main'
 group 'com.annimon'
-version '1.1-SNAPSHOT'
+version '1.1.1-SNAPSHOT'
 
 sourceCompatibility = 17
 targetCompatibility = 17
@@ -21,8 +21,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.annimon:tgbots-module:6.5.1'
-    implementation 'org.slf4j:slf4j-simple:2.0.9'
+    implementation 'com.annimon:tgbots-module:7.1.0'
+    implementation 'org.slf4j:slf4j-simple:2.0.13'
 }
 
 test {
