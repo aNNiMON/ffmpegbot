@@ -18,7 +18,7 @@ public class AudioEffect extends StringParameter {
     );
 
     public AudioEffect() {
-        super("aeffect", "Audio effect", VALUES, "");
+        super("aeffect", "\uD83D\uDD08 Effect", VALUES, "");
     }
 
     @Override

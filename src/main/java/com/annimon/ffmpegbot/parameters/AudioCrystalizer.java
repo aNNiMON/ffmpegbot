@@ -9,7 +9,7 @@ public class AudioCrystalizer extends StringParameter {
     );
 
     public AudioCrystalizer() {
-        super("crystalizer", "Audio crystalizer", VALUES, "0");
+        super("crystalizer", "\uD83D\uDD08 Crystalizer", VALUES, "0");
     }
 
     @Override

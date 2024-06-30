@@ -12,7 +12,7 @@ public class AudioPitch extends StringParameter {
     );
 
     public AudioPitch() {
-        super("apitch", "Audio pitch", VALUES, "1");
+        super("apitch", "\uD83D\uDD08 Pitch", VALUES, "1");
     }
 
     @Override

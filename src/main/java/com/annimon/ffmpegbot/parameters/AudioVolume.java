@@ -12,7 +12,7 @@ public class AudioVolume extends StringParameter {
     );
 
     public AudioVolume() {
-        super("volume", "Volume", VALUES, "");
+        super("volume", "\uD83D\uDD08 Volume", VALUES, "");
     }
 
     @Override

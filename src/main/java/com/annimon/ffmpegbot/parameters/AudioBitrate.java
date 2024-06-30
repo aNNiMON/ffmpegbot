@@ -11,7 +11,7 @@ public class AudioBitrate extends StringParameter {
     );
 
     public AudioBitrate() {
-        super("abitrate", "Audio bitrate", VALUES, "");
+        super("abitrate", "\uD83D\uDD08 Bitrate", VALUES, "");
     }
 
     @Override
