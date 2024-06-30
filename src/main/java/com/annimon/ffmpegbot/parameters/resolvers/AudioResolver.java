@@ -20,6 +20,7 @@ public class AudioResolver implements ParametersResolver {
             disableAudioParam(parameters, fileInfo.fileType());
             parameters.addAll(List.of(
                     new AudioBitrate(),
+                    new AudioCrystalizer(),
                     new AudioEffect(),
                     new AudioPitch(),
                     new AudioVolume()

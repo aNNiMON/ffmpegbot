@@ -45,6 +45,14 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
     }
 
     @Override
+    public void visit(AudioCrystalizer p, MediaSession input) {
+        if (discardAudio) return;
+        final String value = p.getValue();
+        if (value.isEmpty() || value.equals("0")) return;
+        audioFilters.add("crystalizer=" + value);
+    }
+
+    @Override
     public void visit(AudioEffect p, MediaSession input) {
         if (discardAudio) return;
         if (p.getValue().isEmpty()) return;

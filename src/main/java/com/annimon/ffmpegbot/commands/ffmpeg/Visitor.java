@@ -5,6 +5,7 @@ import com.annimon.ffmpegbot.parameters.*;
 public interface Visitor<I> {
     void visit(DisableAudio p, I input);
     void visit(AudioBitrate p, I input);
+    void visit(AudioCrystalizer p, I input);
     void visit(AudioEffect p, I input);
     void visit(AudioPitch p, I input);
     void visit(AudioVolume p, I input);
