@@ -51,6 +51,8 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
         audioFilters.add(switch (p.getValue()) {
             case AudioEffect.ECHO -> "aecho=0.8:0.9:40|50|70:0.4|0.3|0.2";
             case AudioEffect.ECHO_2 -> "aecho=0.8:0.9:500|1000:0.2|0.1";
+            case AudioEffect.NOISE_REDUCTION_5 -> "afftdn=nr=5";
+            case AudioEffect.NOISE_REDUCTION_12 -> "afftdn=nr=12";
             case AudioEffect.PULSATOR -> "apulsator=mode=sine:hz=0.5";
             case AudioEffect.VIBRATO -> "vibrato=f=4";
             default /* AudioEffect.ROBOT */ -> "afftfilt=\"" +
