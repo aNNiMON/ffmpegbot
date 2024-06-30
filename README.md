@@ -30,7 +30,7 @@ cp ffmpegbot.yaml.template ffmpegbot.yaml
 vim ffmpegbot.yaml
 mkdir {input,output}
 # Run
-java -jar ./build/libs/ffmpegbot-1.1-SNAPSHOT-all.jar
+java -jar ./build/libs/ffmpegbot-1.1.1-SNAPSHOT-all.jar
 ```
 
 

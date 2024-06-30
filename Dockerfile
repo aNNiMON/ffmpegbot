@@ -18,8 +18,8 @@ RUN apk add --no-cache python3 py3-pip ffmpeg \
   && python3 -m pip install --upgrade pyrogram \
   && python3 -m pip install --upgrade TgCrypto
 WORKDIR /app
-COPY --from=builder /usr/src/java-code/build/libs/ffmpegbot-1.1-SNAPSHOT-all.jar .
+COPY --from=builder /usr/src/java-code/build/libs/ffmpegbot-1.1.1-SNAPSHOT-all.jar .
 RUN mkdir input && mkdir output
 COPY pytgfile.py .
 COPY ffmpegbot-docker.yaml .
-ENTRYPOINT ["java", "-jar", "/app/ffmpegbot-1.1-SNAPSHOT-all.jar", "docker"]
+ENTRYPOINT ["java", "-jar", "/app/ffmpegbot-1.1.1-SNAPSHOT-all.jar", "docker"]
