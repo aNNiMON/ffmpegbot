@@ -4,6 +4,7 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 
 public class Saturation extends StringParameter {
+    public static final String ID = "saturation";
     private static final List<String> VALUES = List.of(
             "0", "0.25", "0.5", "0.75",
             "1", "1.25", "1.5", "1.75",
@@ -11,7 +12,7 @@ public class Saturation extends StringParameter {
     );
 
     public Saturation() {
-        super("saturation", "Saturation", VALUES, "1");
+        super(ID, "Saturation", VALUES, "1");
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 
 public class Gamma extends StringParameter {
+    public static final String ID = "gamma";
     private static final List<String> VALUES = List.of(
             "0.2", "0.4", "0.6", "0.8",
             "1", "1.2", "1.4", "1.6",
@@ -11,7 +12,7 @@ public class Gamma extends StringParameter {
     );
 
     public Gamma() {
-        super("gamma", "Gamma", VALUES, "1");
+        super(ID, "Gamma", VALUES, "1");
     }
 
     @Override

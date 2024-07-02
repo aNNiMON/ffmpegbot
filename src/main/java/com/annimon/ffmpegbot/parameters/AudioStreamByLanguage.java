@@ -5,12 +5,13 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 
 public class AudioStreamByLanguage extends StringParameter {
+    public static final String ID = "asellang";
     private static final List<String> VALUES = List.of(
             "", "eng", "fra", "ita", "ukr", "spa"
     );
 
     public AudioStreamByLanguage() {
-        super("asellang", "Audio Track", VALUES, "");
+        super(ID, "Audio Track", VALUES, "");
     }
 
     @Override

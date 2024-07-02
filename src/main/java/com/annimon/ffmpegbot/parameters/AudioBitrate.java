@@ -5,13 +5,14 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 
 public class AudioBitrate extends StringParameter {
+    public static final String ID = "abitrate";
     private static final List<String> VALUES = List.of(
             "4k", "16k", "32k", "", "64k", "128k",
             "256k", "320k", "512k"
     );
 
     public AudioBitrate() {
-        super("abitrate", "\uD83D\uDD08 Bitrate", VALUES, "");
+        super(ID, "\uD83D\uDD08 Bitrate", VALUES, "");
     }
 
     @Override

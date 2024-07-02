@@ -5,12 +5,13 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 
 public class VideoFrameRate extends StringParameter {
+    public static final String ID = "vfr";
     private static final List<String> VALUES = List.of(
             "5", "10", "15", "20", "25", "", "30", "45", "60"
     );
 
     public VideoFrameRate() {
-        super("vfr", "Frame rate",  VALUES, "");
+        super(ID, "Frame rate",  VALUES, "");
     }
 
     @Override

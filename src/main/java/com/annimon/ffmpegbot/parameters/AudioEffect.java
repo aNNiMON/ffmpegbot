@@ -5,6 +5,8 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 
 public class AudioEffect extends StringParameter {
+    public static final String ID = "aeffect";
+
     public static final String ROBOT = "Robot";
     public static final String ECHO = "Echo";
     public static final String ECHO_2 = "Echo 2";
@@ -18,7 +20,7 @@ public class AudioEffect extends StringParameter {
     );
 
     public AudioEffect() {
-        super("aeffect", "\uD83D\uDD08 Effect", VALUES, "");
+        super(ID, "\uD83D\uDD08 Effect", VALUES, "");
     }
 
     @Override

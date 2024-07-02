@@ -4,6 +4,7 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 
 public class Contrast extends StringParameter {
+    public static final String ID = "contrast";
     private static final List<String> VALUES = List.of(
             "0.4", "0.6", "0.8",
             "1", "1.2", "1.4", "1.6",
@@ -11,7 +12,7 @@ public class Contrast extends StringParameter {
     );
 
     public Contrast() {
-        super("contrast", "Contrast", VALUES, "1");
+        super(ID, "Contrast", VALUES, "1");
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 
 public class AudioPitch extends StringParameter {
+    public static final String ID = "apitch";
     private static final List<String> VALUES = List.of(
             "0.6", "0.8", "0.9",
             "1",
@@ -12,7 +13,7 @@ public class AudioPitch extends StringParameter {
     );
 
     public AudioPitch() {
-        super("apitch", "\uD83D\uDD08 Pitch", VALUES, "1");
+        super(ID, "\uD83D\uDD08 Pitch", VALUES, "1");
     }
 
     @Override

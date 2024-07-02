@@ -5,6 +5,7 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 
 public class AudioVolume extends StringParameter {
+    public static final String ID = "volume";
     private static final List<String> VALUES = List.of(
             "-15dB", "-10dB", "-5dB", "-2dB",
             "", "2dB", "5dB", "10dB",
@@ -12,7 +13,7 @@ public class AudioVolume extends StringParameter {
     );
 
     public AudioVolume() {
-        super("volume", "\uD83D\uDD08 Volume", VALUES, "");
+        super(ID, "\uD83D\uDD08 Volume", VALUES, "");
     }
 
     @Override

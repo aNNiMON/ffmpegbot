@@ -5,12 +5,13 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 
 public class VideoScale extends StringParameter {
+    public static final String ID = "scale";
     private static final List<String> VALUES = List.of(
             "144", "240", "360", "", "480", "720", "1080"
     );
 
     public VideoScale() {
-        super("scale", "Scale", VALUES, "");
+        super(ID, "Scale", VALUES, "");
     }
 
     @Override

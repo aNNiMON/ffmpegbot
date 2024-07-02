@@ -5,29 +5,41 @@ import java.util.*;
 
 public class Parameters extends AbstractCollection<Parameter<?>> {
 
-    private final Map<String, Parameter<?>> parameters;
+    private final Map<String, Parameter<?>> enabledParameters;
+    private final Map<String, Parameter<?>> disabledParameters;
 
     public Parameters() {
-        parameters = new LinkedHashMap<>();
+        enabledParameters = new LinkedHashMap<>();
+        disabledParameters = new LinkedHashMap<>();
     }
 
     @Override
     public boolean add(Parameter<?> parameter) {
-        return !Objects.equals(parameter, parameters.put(parameter.id, parameter));
+        return !Objects.equals(parameter, enabledParameters.put(parameter.id, parameter));
     }
 
     public Parameter<?> findById(String id) {
-        return parameters.get(id);
+        return enabledParameters.get(id);
+    }
+
+    public void disable(String id) {
+        Optional.ofNullable(findById(id))
+                .ifPresent(p -> disabledParameters.put(p.id, p));
+    }
+
+    public void enable(String id) {
+        Optional.ofNullable(disabledParameters.get(id))
+                .ifPresent(this::add);
     }
 
     @NotNull
     @Override
     public Iterator<Parameter<?>> iterator() {
-        return parameters.values().iterator();
+        return enabledParameters.values().iterator();
     }
 
     @Override
     public int size() {
-        return parameters.size();
+        return enabledParameters.size();
     }
 }

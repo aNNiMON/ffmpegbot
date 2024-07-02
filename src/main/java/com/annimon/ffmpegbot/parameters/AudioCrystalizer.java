@@ -4,12 +4,13 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 
 public class AudioCrystalizer extends StringParameter {
+    public static final String ID = "crystalizer";
     private static final List<String> VALUES = List.of(
             "-8", "-4", "-2", "0", "2", "4", "8"
     );
 
     public AudioCrystalizer() {
-        super("crystalizer", "\uD83D\uDD08 Crystalizer", VALUES, "0");
+        super(ID, "\uD83D\uDD08 Crystalizer", VALUES, "0");
     }
 
     @Override
