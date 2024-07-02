@@ -1,6 +1,6 @@
 package com.annimon.ffmpegbot.parameters.resolvers;
 
-import com.annimon.ffmpegbot.parameters.Parameter;
+import com.annimon.ffmpegbot.parameters.Parameters;
 import com.annimon.ffmpegbot.session.FileInfo;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class GlobalParametersResolver implements ParametersResolver {
     }
 
     @Override
-    public void resolve(@NotNull List<Parameter<?>> parameters, @NotNull FileInfo fileInfo) {
+    public void resolve(@NotNull Parameters parameters, @NotNull FileInfo fileInfo) {
         for (ParametersResolver resolver : resolvers) {
             resolver.resolve(parameters, fileInfo);
         }

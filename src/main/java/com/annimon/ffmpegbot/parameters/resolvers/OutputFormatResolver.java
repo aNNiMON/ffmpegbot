@@ -1,7 +1,7 @@
 package com.annimon.ffmpegbot.parameters.resolvers;
 
 import com.annimon.ffmpegbot.parameters.OutputFormat;
-import com.annimon.ffmpegbot.parameters.Parameter;
+import com.annimon.ffmpegbot.parameters.Parameters;
 import com.annimon.ffmpegbot.session.FileInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +12,7 @@ import static com.annimon.ffmpegbot.parameters.OutputFormat.*;
 public class OutputFormatResolver implements ParametersResolver {
 
     @Override
-    public void resolve(@NotNull List<Parameter<?>> parameters, @NotNull FileInfo fileInfo) {
+    public void resolve(@NotNull Parameters parameters, @NotNull FileInfo fileInfo) {
         final var outputFormat = switch (fileInfo.fileType()) {
             case VIDEO -> forVideo(fileInfo);
             case VIDEO_NOTE -> new OutputFormat(List.of(VIDEO_NOTE, VIDEO, AUDIO), VIDEO_NOTE);

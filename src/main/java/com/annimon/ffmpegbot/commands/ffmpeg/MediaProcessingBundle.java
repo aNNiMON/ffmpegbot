@@ -2,8 +2,8 @@ package com.annimon.ffmpegbot.commands.ffmpeg;
 
 import com.annimon.ffmpegbot.file.FileDownloadException;
 import com.annimon.ffmpegbot.file.FileDownloader;
-import com.annimon.ffmpegbot.parameters.Parameter;
 import com.annimon.ffmpegbot.file.FilePath;
+import com.annimon.ffmpegbot.parameters.Parameters;
 import com.annimon.ffmpegbot.parameters.resolvers.GlobalParametersResolver;
 import com.annimon.ffmpegbot.parameters.resolvers.ParametersResolver;
 import com.annimon.ffmpegbot.session.MediaSession;
@@ -19,7 +19,6 @@ import com.annimon.tgbotsmodule.services.CommonAbsSender;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -54,7 +53,7 @@ public class MediaProcessingBundle implements CommandBundle<For> {
         session.setChatId(message.getChatId());
         session.fromFileInfo(fileInfo);
 
-        final var params = new ArrayList<Parameter<?>>();
+        final var params = new Parameters();
         parametersResolver.resolve(params, fileInfo);
         session.setParams(params);
 
@@ -78,10 +77,7 @@ public class MediaProcessingBundle implements CommandBundle<For> {
             session.setSelectedParam(null);
         } else {
             final String id = ctx.argument(0);
-            final var param = session.getParams().stream()
-                    .filter(p -> p.getId().equals(id))
-                    .findFirst().orElse(null);
-
+            final var param = session.getParams().findById(id);
             session.setSelectedParam(param);
 
             if (param != null && ctx.argumentsLength() == 2) {

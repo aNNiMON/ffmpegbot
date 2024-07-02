@@ -1,6 +1,7 @@
 package com.annimon.ffmpegbot.commands.ffmpeg;
 
 import com.annimon.ffmpegbot.parameters.Parameter;
+import com.annimon.ffmpegbot.parameters.Parameters;
 import com.annimon.ffmpegbot.session.MediaSession;
 import com.annimon.ffmpegbot.session.YtDlpSession;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -26,7 +27,7 @@ public class MediaProcessingKeyboard {
         }
     }
 
-    private static InlineKeyboardMarkup createParamsListKeyboard(List<Parameter<?>> params) {
+    private static InlineKeyboardMarkup createParamsListKeyboard(Parameters params) {
         final var keyboard = new ArrayList<List<InlineKeyboardButton>>();
         final var it = params.iterator();
         while (it.hasNext()) {

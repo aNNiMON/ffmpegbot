@@ -9,7 +9,7 @@ import java.util.List;
 public class AudioResolver implements ParametersResolver {
 
     @Override
-    public void resolve(@NotNull List<Parameter<?>> parameters, @NotNull FileInfo fileInfo) {
+    public void resolve(@NotNull Parameters parameters, @NotNull FileInfo fileInfo) {
         final boolean hasAudio = switch (fileInfo.fileType()) {
             case ANIMATION -> false;
             case AUDIO, VOICE -> true;
@@ -28,7 +28,7 @@ public class AudioResolver implements ParametersResolver {
         }
     }
 
-    private void disableAudioParam(@NotNull List<Parameter<?>> parameters, @NotNull FileType fileType) {
+    private void disableAudioParam(@NotNull Parameters parameters, @NotNull FileType fileType) {
         final boolean canAudioBeDisabled = switch (fileType) {
             case ANIMATION, AUDIO, VOICE -> false;
             case VIDEO, VIDEO_NOTE -> true;

@@ -1,9 +1,9 @@
 package com.annimon.ffmpegbot.session;
 
 import com.annimon.ffmpegbot.parameters.Parameter;
+import com.annimon.ffmpegbot.parameters.Parameters;
 
 import java.io.File;
-import java.util.List;
 import java.util.StringJoiner;
 
 import static com.annimon.ffmpegbot.TextUtils.*;
@@ -18,7 +18,7 @@ public final class MediaSession extends Session {
     private String resolution;
     // Parameters
     private Parameter<?> selectedParam;
-    private List<Parameter<?>> params;
+    private Parameters params;
     // Files
     private File inputFile;
     private File outputFile;
@@ -82,11 +82,11 @@ public final class MediaSession extends Session {
         }
     }
 
-    public List<Parameter<?>> getParams() {
+    public Parameters getParams() {
         return params;
     }
 
-    public void setParams(List<Parameter<?>> params) {
+    public void setParams(Parameters params) {
         this.params = params;
     }
 

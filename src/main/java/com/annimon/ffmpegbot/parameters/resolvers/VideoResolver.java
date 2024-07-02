@@ -8,7 +8,7 @@ import java.util.List;
 public class VideoResolver implements ParametersResolver {
 
     @Override
-    public void resolve(@NotNull List<Parameter<?>> parameters, @NotNull FileInfo fileInfo) {
+    public void resolve(@NotNull Parameters parameters, @NotNull FileInfo fileInfo) {
         final boolean hasVideo = switch (fileInfo.fileType()) {
             case ANIMATION, VIDEO, VIDEO_NOTE -> true;
             default -> false;
