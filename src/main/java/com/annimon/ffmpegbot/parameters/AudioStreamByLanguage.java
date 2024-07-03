@@ -11,7 +11,7 @@ public class AudioStreamByLanguage extends StringParameter {
     );
 
     public AudioStreamByLanguage() {
-        super(ID, "Audio Track", VALUES, "");
+        super(ID, "\uD83D\uDD08 Track", VALUES, "");
     }
 
     @Override
