@@ -7,6 +7,10 @@ public abstract class BooleanParameter extends Parameter<Boolean> {
         super(id, name, List.of(false, true), value);
     }
 
+    public boolean getValueAsPrimitive() {
+        return (value != null && value);
+    }
+
     @Override
     public String describeValue(Boolean value) {
         if (value != null && value) {

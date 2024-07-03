@@ -24,4 +24,11 @@ public class GlobalParametersResolver implements ParametersResolver {
             resolver.resolve(parameters, fileInfo);
         }
     }
+
+    @Override
+    public void refine(@NotNull Parameters parameters) {
+        for (ParametersResolver resolver : resolvers) {
+            resolver.refine(parameters);
+        }
+    }
 }

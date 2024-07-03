@@ -12,12 +12,14 @@ public abstract class Parameter<T> {
     protected final String displayName;
     protected final List<? extends T> possibleValues;
     protected T value;
+    private boolean enabled;
 
     protected Parameter(String id, String displayName, List<? extends T> values, T value) {
         this.id = id;
         this.displayName = displayName;
         this.possibleValues = values;
         this.value = value;
+        this.enabled = true;
         checkArgument(!values.isEmpty(), "possible values cannot be empty");
         checkArgument(values.contains(value), "possible values must contain a value");
     }
@@ -34,6 +36,17 @@ public abstract class Parameter<T> {
         return possibleValues.size();
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void enable() {
+        enabled = true;
+    }
+
+    public void disable() {
+        enabled = false;
+    }
 
     public abstract <I> void accept(Visitor<I> visitor, I input);
 

@@ -4,6 +4,8 @@ import com.annimon.ffmpegbot.parameters.*;
 import com.annimon.ffmpegbot.session.FileInfo;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class VideoResolver implements ParametersResolver {
 
@@ -24,5 +26,26 @@ public class VideoResolver implements ParametersResolver {
                     new VideoFrameRate()
             ));
         }
+    }
+
+    @Override
+    public void refine(@NotNull Parameters parameters) {
+        parameters.findById(OutputFormat.ID, OutputFormat.class)
+                .map(Parameter::getValue)
+                .ifPresent(format -> {
+                    final Set<String> parameterIds = Set.of(
+                            Contrast.ID,
+                            Gamma.ID,
+                            Saturation.ID,
+                            VideoBitrate.ID,
+                            VideoScale.ID,
+                            VideoFrameRate.ID
+                    );
+                    if (Objects.equals(format, OutputFormat.AUDIO)) {
+                        parameters.disableAll(parameterIds);
+                    } else {
+                        parameters.enableAll(parameterIds);
+                    }
+                });
     }
 }

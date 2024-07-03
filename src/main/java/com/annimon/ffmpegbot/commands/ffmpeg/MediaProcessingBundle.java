@@ -83,6 +83,7 @@ public class MediaProcessingBundle implements CommandBundle<For> {
             if (param != null && ctx.argumentsLength() == 2) {
                 final int index = Integer.parseInt(ctx.argument(1));
                 param.select(index);
+                parametersResolver.refine(session.getParams());
                 session.setSelectedParam(null);
             }
         }
