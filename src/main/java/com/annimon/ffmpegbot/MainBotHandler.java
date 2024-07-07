@@ -1,6 +1,7 @@
 package com.annimon.ffmpegbot;
 
 import com.annimon.ffmpegbot.commands.HelpCommand;
+import com.annimon.ffmpegbot.commands.PrivacyCommand;
 import com.annimon.ffmpegbot.commands.admin.AdminCommandBundle;
 import com.annimon.ffmpegbot.commands.ffmpeg.InputParametersBundle;
 import com.annimon.ffmpegbot.commands.ffmpeg.MediaProcessingBundle;
@@ -42,6 +43,7 @@ public class MainBotHandler extends BotHandler {
         commands.registerBundle(new YtDlpCommandBundle(sessions));
         commands.registerBundle(new AdminCommandBundle(sessions));
         commands.register(new HelpCommand(permissions));
+        commands.register(new PrivacyCommand());
     }
 
     @Override
