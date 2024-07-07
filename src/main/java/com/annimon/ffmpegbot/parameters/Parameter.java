@@ -5,8 +5,6 @@ import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 import java.util.List;
 import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 public abstract class Parameter<T> {
     protected final String id;
     protected final String displayName;
@@ -20,8 +18,10 @@ public abstract class Parameter<T> {
         this.possibleValues = values;
         this.value = value;
         this.enabled = true;
-        checkArgument(!values.isEmpty(), "possible values cannot be empty");
-        checkArgument(values.contains(value), "possible values must contain a value");
+        if (values.isEmpty())
+            throw new IllegalArgumentException("Possible values cannot be empty");
+        if (!values.contains(value))
+            throw new IllegalArgumentException("Possible values " + values + " must contain " + value);
     }
 
     public String getId() {

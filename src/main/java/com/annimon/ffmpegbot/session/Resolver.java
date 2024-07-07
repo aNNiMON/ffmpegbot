@@ -5,7 +5,7 @@ import com.annimon.tgbotsmodule.api.methods.interfaces.MediaMessageMethod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.methods.ActionType;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 public class Resolver {
     public static @Nullable FileInfo resolveFileInfo(@NotNull Message message) {
@@ -65,9 +65,9 @@ public class Resolver {
 
     public static ActionType resolveAction(@NotNull FileType fileType) {
         return switch (fileType) {
-            case VIDEO -> ActionType.UPLOADVIDEO;
-            case VIDEO_NOTE -> ActionType.UPLOADVIDEONOTE;
-            case VOICE -> ActionType.UPLOADVOICE;
+            case VIDEO -> ActionType.UPLOAD_VIDEO;
+            case VIDEO_NOTE -> ActionType.UPLOAD_VIDEO_NOTE;
+            case VOICE -> ActionType.UPLOAD_VOICE;
             default -> ActionType.TYPING;
         };
     }

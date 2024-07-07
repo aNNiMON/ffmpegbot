@@ -16,7 +16,9 @@ public class TelegramFileDownloader implements FileDownloader {
         try {
             final var tgFile = Methods.getFile(fileId).call(sender);
             final var extension = FilenameUtils.getExtension(tgFile.getFilePath());
-            return sender.downloadFile(tgFile, File.createTempFile("tmp", "file." + extension));
+            File defaultFile = sender.downloadFile(tgFile);
+            File dest = File.createTempFile("tmp", "file." + extension);
+            return defaultFile.renameTo(dest) ? dest : defaultFile;
         } catch (IOException | TelegramApiException | TelegramRuntimeException e) {
             throw new FileDownloadException(e.getMessage(), e);
         }

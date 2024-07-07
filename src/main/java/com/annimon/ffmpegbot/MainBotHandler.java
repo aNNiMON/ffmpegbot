@@ -11,22 +11,21 @@ import com.annimon.ffmpegbot.file.TelegramClientFileDownloader;
 import com.annimon.ffmpegbot.file.TelegramFileDownloader;
 import com.annimon.ffmpegbot.session.Sessions;
 import com.annimon.tgbotsmodule.BotHandler;
+import com.annimon.tgbotsmodule.BotModuleOptions;
 import com.annimon.tgbotsmodule.commands.CommandRegistry;
 import com.annimon.tgbotsmodule.commands.authority.For;
 import org.jetbrains.annotations.NotNull;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class MainBotHandler extends BotHandler {
-    private final BotConfig botConfig;
     private final Permissions permissions;
     private final CommandRegistry<For> commands;
     private final MediaProcessingBundle mediaProcessingBundle;
 
     public MainBotHandler(BotConfig botConfig) {
-        super(botConfig.botToken());
-        this.botConfig = botConfig;
+        super(BotModuleOptions.createDefault(botConfig.botToken()));
         permissions = new Permissions(botConfig.superUsers(), botConfig.allowedUsers());
         commands = new CommandRegistry<>(botConfig.botUsername(), permissions);
         final var sessions = new Sessions();
@@ -55,11 +54,6 @@ public class MainBotHandler extends BotHandler {
             mediaProcessingBundle.handleMessage(this, update.getMessage());
         }
         return null;
-    }
-
-    @Override
-    public String getBotUsername() {
-        return botConfig.botUsername();
     }
 
     @Override
