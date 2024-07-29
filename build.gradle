@@ -6,7 +6,7 @@ plugins {
 
 mainClassName = 'com.annimon.ffmpegbot.Main'
 group 'com.annimon'
-version '1.1.1-SNAPSHOT'
+version '1.2-SNAPSHOT'
 
 sourceCompatibility = 17
 targetCompatibility = 17
@@ -21,7 +21,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.annimon:tgbots-module:7.6.0'
+    implementation ('com.annimon:tgbots-module:7.7.0') {
+        exclude group: 'org.telegram', module: 'telegrambots-webhook'
+    }
     implementation 'org.slf4j:slf4j-simple:2.0.13'
 }
 
