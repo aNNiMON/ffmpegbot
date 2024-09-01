@@ -12,11 +12,8 @@ WORKDIR /usr/src/java-code
 RUN GRADLE_OPTS="-Xmx256m" gradle shadowJar --build-cache --stacktrace --no-daemon
 
 FROM eclipse-temurin:17-jre-alpine
-RUN apk add --no-cache python3 py3-pip ffmpeg \
-  && python3 -m pip install --upgrade wheel \
-  && python3 -m pip install --upgrade yt-dlp \
-  && python3 -m pip install --upgrade pyrogram \
-  && python3 -m pip install --upgrade TgCrypto
+RUN apk add --no-cache python3 python3-dev py3-pip ffmpeg gcc g++ \
+  && python3 -m pip install --break-system-packages --upgrade wheel yt-dlp pyrogram TgCrypto
 WORKDIR /app
 COPY --from=builder /usr/src/java-code/build/libs/ffmpegbot-1.2-SNAPSHOT-all.jar .
 RUN mkdir input && mkdir output
