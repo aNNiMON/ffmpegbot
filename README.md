@@ -39,14 +39,14 @@ java -jar ./build/libs/ffmpegbot-1.2-SNAPSHOT-all.jar
 Note: FFmpeg binary might be installed with limited number of filters and codecs. Some bot features might not work (Audio pitch, robot effect, etc).
 
 ```bash
-# Edit user ids in `superUsers` and `allowedUsers` fields
-vim ffmpegbot-docker.yaml
 docker build --tag 'ffmpegbot' .
 docker run -d -t -i \
   -e BOT_TOKEN='...' \
   -e BOT_USERNAME='...' \
   -e APP_ID='...' \
-  -e APP_HASH='...'\
+  -e APP_HASH='...' \
+  -e SUPERUSERS='12345' \
+  -e ALLOWED_USERS='12346,12347' \
   --name ffmpegbot ffmpegbot:latest
 ```
 
@@ -56,4 +56,5 @@ docker run -d -t -i \
  - `BOT_USERNAME` — Telegram bot username
  - `APP_ID` — Telegram API app_id (see https://core.telegram.org/api/obtaining_api_id)
  - `APP_HASH` — Telegram API app_hash
-
+ - `SUPERUSERS` — Comma-separated list of superusers. Superuser can execute /run command
+ - `ALLOWED_USERS` — Comma-separated list of allowed user ids

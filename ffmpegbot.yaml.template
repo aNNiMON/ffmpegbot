@@ -6,7 +6,8 @@ appId: 12345
 appHash: abc123def456
 # Path to Telegram API file downloader script
 downloaderScript: pytgfile.py
-# Superusers can execute /run command
-superUsers: [12345]
-# Allowed user ids
-allowedUsers: [12346, 12347]
+# Comma-separated list of superusers
+# Superuser can execute /run command
+superUsers: 12345
+# Comma-separated list of allowed user ids
+allowedUsers: 12346, 12347

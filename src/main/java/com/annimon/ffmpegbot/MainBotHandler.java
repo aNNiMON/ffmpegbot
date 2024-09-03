@@ -26,7 +26,7 @@ public class MainBotHandler extends BotHandler {
 
     public MainBotHandler(BotConfig botConfig) {
         super(BotModuleOptions.createDefault(botConfig.botToken()));
-        permissions = new Permissions(botConfig.superUsers(), botConfig.allowedUsers());
+        permissions = new Permissions(botConfig.superUserIds(), botConfig.allowedUserIds());
         commands = new CommandRegistry<>(botConfig.botUsername(), permissions);
         final var sessions = new Sessions();
         final var fallbackFileDownloader = new FallbackFileDownloader(
