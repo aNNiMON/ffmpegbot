@@ -6,6 +6,10 @@ import com.annimon.tgbotsmodule.Runner;
 import com.annimon.tgbotsmodule.beans.Config;
 import com.annimon.tgbotsmodule.services.YamlConfigLoaderService;
 import org.jetbrains.annotations.NotNull;
+import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
+import org.telegram.telegrambots.meta.api.methods.GetMe;
+import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
@@ -19,7 +23,13 @@ public class Main implements BotModule {
     public @NotNull BotHandler botHandler(@NotNull Config config) {
         final var configLoader = new YamlConfigLoaderService();
         final var configFile = configLoader.configFile("ffmpegbot", config.getProfile());
-        final var wordlyConfig = configLoader.loadFile(configFile, BotConfig.class);
-        return new MainBotHandler(wordlyConfig);
+        final var botConfig = configLoader.loadFile(configFile, BotConfig.class);
+        try {
+            final var telegramClient = new OkHttpTelegramClient(botConfig.botToken());
+            final User bot = telegramClient.execute(new GetMe());
+            return new MainBotHandler(botConfig, bot.getUserName());
+        } catch (TelegramApiException e) {
+            throw new IllegalStateException("Unable to get information about bot", e);
+        }
     }
 }

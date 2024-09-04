@@ -1,12 +1,14 @@
 package com.annimon.ffmpegbot;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record BotConfig(String appId, String appHash,
-                        String botToken, String botUsername,
+                        String botToken,
                         String downloaderScript,
                         String superUsers, String allowedUsers) {
 

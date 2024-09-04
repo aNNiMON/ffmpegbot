@@ -24,17 +24,17 @@ public class MainBotHandler extends BotHandler {
     private final CommandRegistry<For> commands;
     private final MediaProcessingBundle mediaProcessingBundle;
 
-    public MainBotHandler(BotConfig botConfig) {
+    public MainBotHandler(BotConfig botConfig, String botUserName) {
         super(BotModuleOptions.createDefault(botConfig.botToken()));
         permissions = new Permissions(botConfig.superUserIds(), botConfig.allowedUserIds());
-        commands = new CommandRegistry<>(botConfig.botUsername(), permissions);
+        commands = new CommandRegistry<>(botUserName, permissions);
         final var sessions = new Sessions();
         final var fallbackFileDownloader = new FallbackFileDownloader(
                 new TelegramFileDownloader(),
                 new TelegramClientFileDownloader(
                         botConfig.downloaderScript(),
                         botConfig.appId(), botConfig.appHash(),
-                        botConfig.botToken(), botConfig.botUsername())
+                        botConfig.botToken(), botUserName)
         );
         mediaProcessingBundle = new MediaProcessingBundle(sessions, fallbackFileDownloader);
         commands.registerBundle(mediaProcessingBundle);

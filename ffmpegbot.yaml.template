@@ -1,6 +1,5 @@
-# Telegram bot token and bot username
+# Telegram bot token
 botToken: 1234567890:AAAABBBBCCCCDDDDEEEEFF-GGGGHHHHIIII
-botUsername: yourbotname
 # Telegram API app_id / app_hash (see https://core.telegram.org/api/obtaining_api_id)
 appId: 12345
 appHash: abc123def456
