@@ -39,14 +39,13 @@ java -jar ./build/libs/ffmpegbot-1.2-SNAPSHOT-all.jar
 Note: FFmpeg binary might be installed with limited number of filters and codecs. Some bot features might not work (Audio pitch, robot effect, etc).
 
 ```bash
-docker build --tag 'ffmpegbot' .
 docker run -d -t -i \
   -e BOT_TOKEN='...' \
   -e APP_ID='...' \
   -e APP_HASH='...' \
   -e SUPERUSERS='12345' \
   -e ALLOWED_USERS='12346,12347' \
-  --name ffmpegbot ffmpegbot:latest
+  --name ffmpegbot ghcr.io/annimon/ffmpegbot:latest
 ```
 
 #### Environment variables
