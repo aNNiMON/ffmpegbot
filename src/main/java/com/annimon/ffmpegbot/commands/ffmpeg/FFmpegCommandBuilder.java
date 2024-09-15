@@ -50,6 +50,30 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
     }
 
     @Override
+    public void visit(AudioCompressor p, MediaSession input) {
+        if (discardAudio) return;
+        if (p.getValue().isEmpty()) return;
+        audioFilters.add(switch (p.getValue()) {
+            case AudioCompressor.COMP_2_6DB -> "compand=points=-80/-80|-6/-6|0/-3.8|20/3.5";
+            case AudioCompressor.COMP_2_12DB -> "compand=points=-80/-80|-12/-12|0/-6.8|20/1.9";
+            case AudioCompressor.COMP_2_18DB -> "compand=points=-80/-80|-18/-18|0/-9.8|20/0.7";
+            case AudioCompressor.COMP_3_9DB -> "compand=points=-80/-80|-9/-9|0/-3.8|20/-2.1";
+            case AudioCompressor.COMP_3_18DB -> "compand=points=-80/-80|-18/-18|0/-6.8|20/-4.5";
+            case AudioCompressor.COMP_NORMALIZE_1 -> "compand=.3|.3:1|1:-90/-60|-60/-40|-40/-30|-20/-20:6:0:-90:0.2";
+            case AudioCompressor.COMP_NORMALIZE_2 -> "compand=0|0:1|1:-90/-900|-70/-70|-30/-9|0/-3:6:0:0:0";
+            case AudioCompressor.COMP_NOISE_GATE_1 -> "compand=points=-80/-900|-45/-15|-27/-9|0/-7|20/-7:attacks=0";
+            case AudioCompressor.COMP_NOISE_GATE_2 -> "compand=.1|.1:.2|.2:-900/-900|-50.1/-900|-50/-50:.01:0:-90:.1";
+            case AudioCompressor.COMP_HARD_LIMITER_6DB -> "compand=attacks=0:points=-80/-80|-6/-6|20/-6";
+            case AudioCompressor.COMP_HARD_LIMITER_12DB -> "compand=attacks=0:points=-80/-80|-12/-12|20/-12";
+            case AudioCompressor.COMP_HARD_NOISE_GATE_35DB -> "compand=attacks=0:points=-80/-115|-35.1/-80|-35/-35|20/20";
+            case AudioCompressor.COMP_SOFT_LIMITER -> "compand=attacks=0:points=-80/-80|-12.4/-12.4|-6/-8|0/-6.8|20/-2.8";
+            case AudioCompressor.COMP_EXPANDER -> "compand=attacks=0:points=-80/-169|-54/-80|-49.5/-64.6|-41.1/-41.1|-25.8/-15|-10.8/-4.5|0/0|20/8.3";
+            case AudioCompressor.COMP_GATE -> "compand=points=-80/-105|-62/-80|-15.4/-15.4|0/-12|20/-7.6";
+            default -> "compand";
+        });
+    }
+
+    @Override
     public void visit(AudioCrystalizer p, MediaSession input) {
         if (discardAudio) return;
         final String value = p.getValue();

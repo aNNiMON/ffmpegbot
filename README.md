@@ -6,9 +6,10 @@ Telegram Bot for re-encoding media
 
  - change a video resolution, bitrate, frame rate, speed
  - change an audio bitrate, volume, pitch
- - apply audio effects
+ - apply audio effects, compressor
  - extract or remove audio from the video
  - resend video note as a regular video, or video as an audio track
+ - output audio spectrum for quick analysis
 
 ## Requirements
 

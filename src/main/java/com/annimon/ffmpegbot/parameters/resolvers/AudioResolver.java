@@ -22,6 +22,7 @@ public class AudioResolver implements ParametersResolver {
             disableAudioParam(parameters, fileInfo.fileType());
             parameters.addAll(List.of(
                     new AudioBitrate(),
+                    new AudioCompressor(),
                     new AudioCrystalizer(),
                     new AudioEffect(),
                     new AudioPitch(),
@@ -36,6 +37,7 @@ public class AudioResolver implements ParametersResolver {
                 .ifPresent(p -> {
                     final Set<String> parameterIds = Set.of(
                             AudioBitrate.ID,
+                            AudioCompressor.ID,
                             AudioCrystalizer.ID,
                             AudioEffect.ID,
                             AudioPitch.ID,
