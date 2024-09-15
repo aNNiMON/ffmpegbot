@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation ('com.annimon:tgbots-module:7.9.0') {
+    implementation ('com.annimon:tgbots-module:7.10.0') {
         exclude group: 'org.telegram', module: 'telegrambots-webhook'
     }
     implementation 'org.slf4j:slf4j-simple:2.0.13'
