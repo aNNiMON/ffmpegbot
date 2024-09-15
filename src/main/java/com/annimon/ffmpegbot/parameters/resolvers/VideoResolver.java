@@ -4,7 +4,6 @@ import com.annimon.ffmpegbot.parameters.*;
 import com.annimon.ffmpegbot.session.FileInfo;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class VideoResolver implements ParametersResolver {
@@ -41,7 +40,8 @@ public class VideoResolver implements ParametersResolver {
                             VideoScale.ID,
                             VideoFrameRate.ID
                     );
-                    if (Objects.equals(format, OutputFormat.AUDIO)) {
+                    Set<String> audioOnly = Set.of(OutputFormat.AUDIO, OutputFormat.AUDIO_SPECTRUM);
+                    if (audioOnly.contains(format)) {
                         parameters.disableAll(parameterIds);
                     } else {
                         parameters.enableAll(parameterIds);

@@ -15,7 +15,7 @@ public class OutputFormatResolver implements ParametersResolver {
     public void resolve(@NotNull Parameters parameters, @NotNull FileInfo fileInfo) {
         final var outputFormat = switch (fileInfo.fileType()) {
             case VIDEO -> forVideo(fileInfo);
-            case VIDEO_NOTE -> new OutputFormat(List.of(VIDEO_NOTE, VIDEO, AUDIO), VIDEO_NOTE);
+            case VIDEO_NOTE -> new OutputFormat(List.of(VIDEO_NOTE, VIDEO, AUDIO, AUDIO_SPECTRUM), VIDEO_NOTE);
             case ANIMATION -> forAnimation(fileInfo);
             default -> null;
         };
@@ -32,6 +32,7 @@ public class OutputFormatResolver implements ParametersResolver {
             types.add(VIDEO_NOTE);
         }
         types.add(AUDIO);
+        types.add(AUDIO_SPECTRUM);
         return new OutputFormat(types, VIDEO);
     }
 

@@ -2,9 +2,8 @@ package com.annimon.ffmpegbot.parameters;
 
 import com.annimon.ffmpegbot.commands.ffmpeg.Visitor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class OutputFormat extends StringParameter {
     public static final String ID = "output";
@@ -12,15 +11,17 @@ public class OutputFormat extends StringParameter {
     public static final String VIDEO = "VIDEO";
     public static final String AUDIO = "AUDIO";
     public static final String VIDEO_NOTE = "VIDEO NOTE";
+    public static final String AUDIO_SPECTRUM = "AUDIO SPECTRUM";
 
     public OutputFormat(List<String> values, String initialValue) {
         super(ID, "➡️ Output", values, initialValue);
     }
 
-    public OutputFormat disableFormat(String format) {
+    public OutputFormat disableFormat(String... formats) {
         if (possibleValues.size() <= 1) return this;
+        final Set<String> set = Set.of(formats);
         final var values = possibleValues.stream()
-                .filter(f -> !Objects.equals(f, format))
+                .filter(Predicate.not(set::contains))
                 .map(Objects::toString)
                 .toList();
         if (possibleValues.size() == values.size()) {
@@ -29,14 +30,13 @@ public class OutputFormat extends StringParameter {
         return new OutputFormat(values, values.get(0));
     }
 
-    public OutputFormat enableFormat(String format) {
-        boolean contains = possibleValues.stream()
-                .anyMatch(f -> Objects.equals(f, format));
-        if (contains) return this;
-
-        final var values = new ArrayList<String>(possibleValues);
-        values.add(format);
-        return new OutputFormat(values, values.get(0));
+    public OutputFormat enableFormat(String... formats) {
+        final Set<String> newset = new LinkedHashSet<>(possibleValues);
+        if (newset.addAll(Set.of(formats))) {
+            final var values = new ArrayList<>(newset);
+            return new OutputFormat(new ArrayList<>(values), values.get(0));
+        }
+        return this;
     }
 
     @Override

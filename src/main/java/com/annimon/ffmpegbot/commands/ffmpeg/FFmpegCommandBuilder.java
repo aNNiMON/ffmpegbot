@@ -5,15 +5,19 @@ import com.annimon.ffmpegbot.file.FilePath;
 import com.annimon.ffmpegbot.session.FileType;
 import com.annimon.ffmpegbot.session.FileTypes;
 import com.annimon.ffmpegbot.session.MediaSession;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FFmpegCommandBuilder implements Visitor<MediaSession> {
 
     private boolean discardAudio;
+    private String recipe;
     private final List<String> audioCommands;
     private final List<String> videoCommands;
     private final List<String> audioFilters;
@@ -26,6 +30,7 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
         audioFilters = new ArrayList<>();
         videoFilters = new ArrayList<>();
         eq = new ArrayList<>();
+        recipe = "";
     }
 
     @Override
@@ -145,6 +150,7 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
     public void visit(OutputFormat p, MediaSession session) {
         final String localFilename = session.getInputFile().getName();
         String additionalExtension = "";
+        recipe = "";
 
         switch (p.getValue()) {
             case OutputFormat.VIDEO -> {
@@ -159,6 +165,11 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
                 session.setFileType(FileType.AUDIO);
                 additionalExtension = ".mp3";
             }
+            case OutputFormat.AUDIO_SPECTRUM -> {
+                session.setFileType(FileType.PHOTO);
+                additionalExtension = ".jpg";
+                recipe = OutputFormat.AUDIO_SPECTRUM;
+            }
         }
 
         if (localFilename.toLowerCase(Locale.ENGLISH).endsWith(additionalExtension)) {
@@ -167,26 +178,43 @@ public class FFmpegCommandBuilder implements Visitor<MediaSession> {
         session.setOutputFile(FilePath.outputFile(localFilename + additionalExtension));
     }
 
+    private List<String> visitRecipe(String recipe) {
+        return switch (recipe) {
+            case OutputFormat.AUDIO_SPECTRUM -> List.of(
+                    "-vn",
+                    "-filter_complex",
+                    Stream.concat(audioFilters.stream(), Stream.of("showspectrumpic=s=1200x640:mode=separate"))
+                                    .collect(Collectors.joining(",")),
+                    "-frames:v", "1"
+            );
+            default -> List.of();
+        };
+    }
+
     public String[] buildCommand(final @NotNull MediaSession session) {
         final var commands = new ArrayList<String>();
         commands.addAll(List.of("ffmpeg", "-loglevel", "error", "-stats"));
         commands.addAll(session.getInputParams().asFFmpegCommands());
         commands.addAll(List.of("-i", FilePath.inputDir() + "/" + session.getInputFile().getName()));
-        if (FileTypes.canContainAudio(session.getFileType())) {
-            commands.addAll(audioCommands);
-            if (!audioFilters.isEmpty()) {
-                commands.add("-af");
-                commands.add(String.join(",", audioFilters));
+        if (StringUtils.isNotEmpty(recipe)) {
+            commands.addAll(visitRecipe(recipe));
+        } else {
+            if (FileTypes.canContainAudio(session.getFileType())) {
+                commands.addAll(audioCommands);
+                if (!audioFilters.isEmpty()) {
+                    commands.add("-af");
+                    commands.add(String.join(",", audioFilters));
+                }
             }
-        }
-        if (FileTypes.canContainVideo(session.getFileType())) {
-            commands.addAll(videoCommands);
-            if (!eq.isEmpty()) {
-                videoFilters.add("eq=" + String.join(":", eq));
-            }
-            if (!videoFilters.isEmpty()) {
-                commands.add("-vf");
-                commands.add(String.join(",", videoFilters));
+            if (FileTypes.canContainVideo(session.getFileType())) {
+                commands.addAll(videoCommands);
+                if (!eq.isEmpty()) {
+                    videoFilters.add("eq=" + String.join(":", eq));
+                }
+                if (!videoFilters.isEmpty()) {
+                    commands.add("-vf");
+                    commands.add(String.join(",", videoFilters));
+                }
             }
         }
         commands.addAll(List.of("-y", FilePath.outputDir() + "/" + session.getOutputFile().getName()));

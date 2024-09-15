@@ -57,6 +57,7 @@ public class Resolver {
         return switch (fileType) {
             case ANIMATION -> Methods.sendAnimation();
             case AUDIO -> Methods.sendAudio();
+            case PHOTO -> Methods.sendPhoto();
             case VIDEO -> Methods.sendVideo();
             case VIDEO_NOTE -> Methods.sendVideoNote();
             case VOICE -> Methods.sendVoice();
@@ -65,6 +66,7 @@ public class Resolver {
 
     public static ActionType resolveAction(@NotNull FileType fileType) {
         return switch (fileType) {
+            case PHOTO -> ActionType.UPLOAD_PHOTO;
             case VIDEO -> ActionType.UPLOAD_VIDEO;
             case VIDEO_NOTE -> ActionType.UPLOAD_VIDEO_NOTE;
             case VOICE -> ActionType.UPLOAD_VOICE;

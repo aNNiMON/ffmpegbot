@@ -34,6 +34,7 @@ public class FilePath {
             case ANIMATION, VIDEO, VIDEO_NOTE -> "mp4";
             case AUDIO -> "mp3";
             case VOICE -> "ogg";
+            case PHOTO -> "jpg";
         };
     }
 }
