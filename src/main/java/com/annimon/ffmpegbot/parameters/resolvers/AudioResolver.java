@@ -61,7 +61,6 @@ public class AudioResolver implements ParametersResolver {
                     } else {
                         parameters.enable(AudioBitrate.ID);
                     }
-
                 });
     }
 
