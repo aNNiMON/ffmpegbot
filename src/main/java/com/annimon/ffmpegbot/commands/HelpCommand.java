@@ -55,7 +55,7 @@ public class HelpCommand implements TextCommand {
                 <b>yt-dlp</b>
                 /dl link [format] — download a media using yt-dlp
                   <code>link</code> — a link to download (it must be supported by yt-dlp)
-                  <code>format</code> — (optional) a download format. Can be: best, audio, 240, 360, 480, 720 or 1080. Default: best
+                  <code>format</code> — (optional) a download format. Can be: best, audio, 240, 360, 480, 720 or 1080. Default: 1080
                 /clip link [duration] [format] — make a clip using yt-dlp (intended for streams)
                   <code>link</code> — yt-dlp supported link, livestreams intended such as twitch
                   <code>duration</code> — (optional) duration in seconds. Max: 199, min: 10, default: 20

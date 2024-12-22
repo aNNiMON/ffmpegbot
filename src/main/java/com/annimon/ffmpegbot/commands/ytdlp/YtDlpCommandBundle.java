@@ -26,6 +26,8 @@ import static com.annimon.ffmpegbot.commands.ffmpeg.MediaProcessingKeyboard.crea
 
 public class YtDlpCommandBundle implements CommandBundle<For> {
 
+    private static final String DEFAULT_FORMAT = "1080";
+
     private final Sessions sessions;
 
     public YtDlpCommandBundle(Sessions sessions) {
@@ -64,7 +66,7 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
                 .orElse(20);
         final String downloadOption = Optional.ofNullable(ctx.group(3))
                 .filter(Predicate.not(String::isBlank))
-                .orElse("best");
+                .orElse(DEFAULT_FORMAT);
 
         final var session = createYtDlpSession(ctx.chatId(), url, downloadOption, duration);
         session.setMessageId(ctx.messageId());
@@ -80,7 +82,7 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
         final String url = ctx.group(1);
         final String downloadOption = Optional.ofNullable(ctx.group(2))
                 .filter(Predicate.not(String::isBlank))
-                .orElse("best");
+                .orElse(DEFAULT_FORMAT);
         final int maxDuration = 10 * 60 * 60;
 
         final var session = createYtDlpSession(ctx.chatId(), url, downloadOption, maxDuration);
