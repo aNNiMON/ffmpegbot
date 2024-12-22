@@ -34,18 +34,46 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
 
     @Override
     public void register(@NotNull CommandRegistry commands) {
+        // /dl url best
         commands.register(new SimpleRegexCommand(
                 Pattern.compile("/dl (https?://[^ ]+) ?(audio|best|\\d+)?"),
                 Permissions.ALLOWED_USERS,
                 this::download));
+        // /clip url 30 audio
+        commands.register(new SimpleRegexCommand(
+                Pattern.compile("/clip (https?://[^ ]+)(?: (\\d{1,3}) ?(audio|best|\\d+)?)?"),
+                Permissions.ALLOWED_USERS,
+                this::clip));
+
         commands.register(new SimpleCallbackQueryCommand(
                 CallbackQueryCommands.YTDLP_INFO,
                 Permissions.ALLOWED_USERS,
-                sessionCommand(this::ytDlpInfo)));
+                callbackSession(this::ytDlpInfo)));
         commands.register(new SimpleCallbackQueryCommand(
                 CallbackQueryCommands.YTDLP_START,
                 Permissions.ALLOWED_USERS,
-                sessionCommand(this::ytDlpStart)));
+                callbackSession(this::ytDlpStart)));
+    }
+
+    private void clip(@NotNull RegexMessageContext ctx) {
+        final String url = ctx.group(1);
+        final int duration = Optional.ofNullable(ctx.group(2))
+                .filter(Predicate.not(String::isBlank))
+                .map(Integer::parseInt)
+                .map(d -> Math.max(10, Math.min(199, d)))
+                .orElse(20);
+        final String downloadOption = Optional.ofNullable(ctx.group(3))
+                .filter(Predicate.not(String::isBlank))
+                .orElse("best");
+
+        final var session = createYtDlpSession(ctx.chatId(), url, downloadOption, duration);
+        session.setMessageId(ctx.messageId());
+        sessions.put(session);
+
+        ctx.replyToMessage(session.toString())
+                .enableHtml()
+                .call(ctx.sender);
+        regexSession(this::ytDlpStart).accept(ctx);
     }
 
     private void download(@NotNull RegexMessageContext ctx) {
@@ -53,15 +81,9 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
         final String downloadOption = Optional.ofNullable(ctx.group(2))
                 .filter(Predicate.not(String::isBlank))
                 .orElse("best");
+        final int maxDuration = 10 * 60 * 60;
 
-        final var message = ctx.message();
-        final var fileType = downloadOption.equals("audio") ? FileType.AUDIO : FileType.VIDEO;
-        final var filename = FilePath.generateFilename(url, FilePath.defaultFilename(fileType));
-
-        final var session = new YtDlpSession(url, downloadOption, fileType);
-        session.setChatId(message.getChatId());
-        session.setOutputFilename(filename);
-
+        final var session = createYtDlpSession(ctx.chatId(), url, downloadOption, maxDuration);
         final var result = ctx.replyToMessage(session.toString())
                 .enableHtml()
                 .call(ctx.sender);
@@ -73,7 +95,20 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
                 .call(ctx.sender);
     }
 
-    private void ytDlpInfo(CallbackQueryContext ctx, YtDlpSession session) {
+    private YtDlpSession createYtDlpSession(Long chatId, String url, String downloadOption, int duration) {
+        final var fileType = downloadOption.equals("audio") ? FileType.AUDIO : FileType.VIDEO;
+        final var filename = FilePath.generateFilename(url, FilePath.defaultFilename(fileType));
+
+        final var session = new YtDlpSession(url, downloadOption, fileType);
+        session.setChatId(chatId);
+        session.setOutputFilename(filename);
+        if (duration > 0) {
+            session.getInputParams().setDuration(Integer.toString(duration));
+        }
+        return session;
+    }
+
+    private void ytDlpInfo(YtDlpSessionContext ctx, YtDlpSession session) {
         CompletableFuture.runAsync(() -> new YtDlpTask().getInfo(session))
                 .thenRun(() -> {
                     Methods.editMessageText()
@@ -83,18 +118,17 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
                             .enableHtml()
                             .disableWebPagePreview()
                             .setReplyMarkup(createKeyboard(session))
-                            .callAsync(ctx.sender);
+                            .callAsync(ctx.sender());
                 })
                 .exceptionally(throwable -> {
-                    ctx.answerAsAlert("Failed due to " + throwable.getMessage())
-                            .callAsync(ctx.sender);
+                    ctx.alert("Failed due to " + throwable.getMessage());
                     return null;
                 });
     }
 
-    private void ytDlpStart(CallbackQueryContext ctx, YtDlpSession session) {
+    private void ytDlpStart(YtDlpSessionContext ctx, YtDlpSession session) {
         Methods.sendChatAction(ctx.message().getChatId(), Resolver.resolveAction(session.getFileType()))
-                .callAsync(ctx.sender);
+                .callAsync(ctx.sender());
         CompletableFuture.runAsync(() -> new YtDlpTask().process(session))
                 .thenRunAsync(() -> {
                     final File outputFile = FilePath.outputFile(session.getOutputFilename());
@@ -104,16 +138,15 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
                     Resolver.resolveMethod(session.getFileType())
                             .setChatId(session.getChatId())
                             .setFile(outputFile)
-                            .call(ctx.sender);
+                            .call(ctx.sender());
                 })
                 .exceptionallyAsync(throwable -> {
-                    ctx.answerAsAlert("Failed due to " + throwable.getMessage())
-                            .callAsync(ctx.sender);
+                    ctx.alert("Failed due to " + throwable.getMessage());
                     return null;
                 });
     }
 
-    private Consumer<CallbackQueryContext> sessionCommand(BiConsumer<CallbackQueryContext, YtDlpSession> consumer) {
+    private Consumer<CallbackQueryContext> callbackSession(BiConsumer<YtDlpSessionContext, YtDlpSession> consumer) {
         return ctx -> {
             final var msg = ctx.message();
             if (msg == null) return;
@@ -121,7 +154,17 @@ public class YtDlpCommandBundle implements CommandBundle<For> {
             final var session = sessions.getYtDlpSession(msg.getChatId(), msg.getMessageId());
             if (session == null) return;
 
-            consumer.accept(ctx, session);
+            consumer.accept(new CallbackYtDlpSessionContext(ctx), session);
+        };
+    }
+
+    private Consumer<RegexMessageContext> regexSession(BiConsumer<YtDlpSessionContext, YtDlpSession> consumer) {
+        return ctx -> {
+            final var msg = ctx.message();
+            final var session = sessions.getYtDlpSession(msg.getChatId(), msg.getMessageId());
+            if (session == null) return;
+
+            consumer.accept(new RegexYtDlpSessionContext(ctx), session);
         };
     }
 }
